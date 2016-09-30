@@ -52,7 +52,7 @@ public class Fire : MonoBehaviour
                         }
                     }
 
-                    if (catchFire)
+                    if (catchFire && !tile.GetComponent<TileProperties>().onFire)
                     {
                         GameObject clone = Instantiate(firePrefab, new Vector3(tile.position.x, 0.25f, tile.position.z), Quaternion.identity) as GameObject;
                         clone.transform.SetParent(fireHolder);
