@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2015
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "fireSpreadProto.CSharp.Plugins", "fireSpreadProto.CSharp.Plugins.csproj", "{CFE6BCE8-CA22-068C-8A76-592412DA73B0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "fireSpreadProto.CSharp", "fireSpreadProto.CSharp.csproj", "{45270526-5E7A-F8BC-733A-DDA53C4D231F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "fireSpreadProto.CSharp.Editor", "fireSpreadProto.CSharp.Editor.csproj", "{9DA6A1CB-853E-8159-3EEF-C8A044A19997}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CFE6BCE8-CA22-068C-8A76-592412DA73B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFE6BCE8-CA22-068C-8A76-592412DA73B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFE6BCE8-CA22-068C-8A76-592412DA73B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFE6BCE8-CA22-068C-8A76-592412DA73B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45270526-5E7A-F8BC-733A-DDA53C4D231F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45270526-5E7A-F8BC-733A-DDA53C4D231F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45270526-5E7A-F8BC-733A-DDA53C4D231F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45270526-5E7A-F8BC-733A-DDA53C4D231F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9DA6A1CB-853E-8159-3EEF-C8A044A19997}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9DA6A1CB-853E-8159-3EEF-C8A044A19997}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9DA6A1CB-853E-8159-3EEF-C8A044A19997}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9DA6A1CB-853E-8159-3EEF-C8A044A19997}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
