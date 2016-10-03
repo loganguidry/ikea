@@ -49,7 +49,9 @@
      <Compile Include="Assets\Scripts\FireProperties.cs" />
      <Compile Include="Assets\Scripts\GenerateTiles.cs" />
      <Compile Include="Assets\Scripts\MenuButtonManager.cs" />
+     <Compile Include="Assets\Scripts\MoveFurniture.cs" />
      <Compile Include="Assets\Scripts\PlaceFurniture.cs" />
+     <Compile Include="Assets\Scripts\Player.cs" />
      <Compile Include="Assets\Scripts\RotateObject.cs" />
      <Compile Include="Assets\Scripts\SelectFurniture.cs" />
      <Compile Include="Assets\Scripts\TileProperties.cs" />
