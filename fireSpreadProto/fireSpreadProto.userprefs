@@ -1,12 +1,16 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\SelectFurniture.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Fire.cs">
     <Files>
+      <File FileName="Assets\Scripts\Fire.cs" Line="13" Column="44" />
+      <File FileName="Assets\Scripts\CheckOnFire.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\FireProperties.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Fire.cs" Line="57" Column="157" />
-      <File FileName="Assets\Scripts\MenuButtonManager.cs" Line="24" Column="23" />
-      <File FileName="Assets\Scripts\SelectFurniture.cs" Line="27" Column="69" />
-      <File FileName="Assets\Scripts\Player.cs" Line="6" Column="28" />
+      <File FileName="Assets\Scripts\MenuButtonManager.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\SelectFurniture.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Player.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\MoveFurniture.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\GenerateTiles.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\PlaceFurniture.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
