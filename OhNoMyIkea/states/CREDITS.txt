@@ -1,0 +1,13 @@
+Credits & Attribution
+=====================
+
+Developed by: 
+ Logan Guidry 
+ Therese Henriksson 
+ Jason M
+
+Interface and Spells sound effects:
+ Created by p0ss
+ CC-BY-SA 3.0 License
+ http://opengameart.org/content/interface-sounds-starter-pack
+ http://opengameart.org/content/spell-sounds-starter-pack
