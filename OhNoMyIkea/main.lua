@@ -1,3 +1,4 @@
+
 -- Hide the status bar
 display.setStatusBar(display.HiddenStatusBar)
 
@@ -26,6 +27,7 @@ MaxRounds = 15
 PlayerEliminated = {
 	false, false, false, false
 }
+local hoverTile = {x = 0, y = 0}
 
 -- Background Object
 background = display.newRect(Width / 2, Height / 2, Width, Height)
@@ -70,8 +72,10 @@ currentPlayer:setFillColor(c.r, c.g, c.b)
 require("states.playerSelection")
 require("states.placeFurniture")
 require("states.gameplay")
+require("states.gameover")
 require("audio.audioFiles")
 require("tooltip")
+require("wallBlockage")
 
 -- Tile objects
 require("walls")
@@ -90,6 +94,18 @@ function ChangeState(newState)
 		currentFurnitureHover = nil
 	elseif State == "Gameplay" then
 		GameplayGroup.isVisible = false
+		for i = #Tiles, 1, -1 do
+			Tiles[i].Object:removeSelf()
+			Tiles[i].Fire:removeSelf()
+			if Tiles[i].Sprite ~= nil then
+				Tiles[i].Sprite:removeSelf()
+			end
+			table.remove(Tiles)
+		end
+		for i = #Walls, 1, -1 do
+			Walls[i].Object:removeSelf()
+			table.remove(Walls)
+		end
 	elseif State == "Game Over" then
 
 	end
@@ -105,13 +121,15 @@ function ChangeState(newState)
 	elseif State == "Gameplay" then
 		GameplayGroup.isVisible = true
 		StartFire()
+		StartFire()
 		for i, tile in ipairs(Tiles) do
 			GameplayGroup:insert(tile.Object)
 			tile.Object:toBack()
 		end
 		HoverWallDisplay:toFront()
 	elseif State == "Game Over" then
-		native.showAlert("The firefighters have arrived!", "If your furniture was burnt, you lose!", {"Ok"})
+		GameplayGroup.isVisible = false
+		GameoverGroup.isVisible = true
 	end
 end
 
@@ -230,6 +248,8 @@ local function KeyPress(event)
 				CurrentWallDirection = "vertical"
 				HoverWallDisplay.rotation = 90
 			end
+		elseif event.keyName == "m" then
+			audio.setVolume(0)
 		end
 	end
 end
@@ -281,13 +301,21 @@ local function MouseEvent(event)
 	end
 
 	-- Placing wall
+	for i, tile in ipairs(Tiles) do
+		if event.x >= tile.Object.x - tileSize / 2 and
+			event.x <= tile.Object.x + tileSize / 2 and
+			event.y >= tile.Object.y - tileSize / 2 and
+			event.y <= tile.Object.y + tileSize / 2 then
+			hoverTile = {x = tile.Object.x, y = tile.Object.y}
+		end
+	end
 	if HoverWallDisplay ~= nil then
 		if HoverWallDisplay.rotation % 180 == 0 then
-			HoverWallDisplay.x = event.x - tileSize / 2
-			HoverWallDisplay.y = event.y
+			HoverWallDisplay.x = hoverTile.x - tileSize / 2
+			HoverWallDisplay.y = hoverTile.y + tileSize / 2
 		else
-			HoverWallDisplay.x = event.x
-			HoverWallDisplay.y = event.y - tileSize / 2
+			HoverWallDisplay.x = hoverTile.x + tileSize / 2
+			HoverWallDisplay.y = hoverTile.y - tileSize / 2
 		end
 	end
 

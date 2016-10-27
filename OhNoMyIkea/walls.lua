@@ -26,20 +26,19 @@ function PlaceWall(x, y, rightOrBottomString)
 	end
 
 	local newWall = Wall:new(newX, newY, rightOrBottomString)
-	local isBlockedOff = false
-	for i, tile in ipairs(tiles) do
-		if tile.furniturePlayer == 1 then
-			BlockCheck(tile.x, tile.y)
-		end
-	end
-	if isBlockedOff then
-		print("blocked off!")
-		newWall.Object:removeSelf()
-		return false
-	end
 
 	-- Create wall
 	table.insert(Walls, newWall)
+
+	-- Check if this wall blocks off the fire and the furniture
+	local accessible = CheckWallsForBlockage()
+	if not accessible then
+		print("Can't place furniture here - No completely blocking off furniture from the fire")
+		newWall.Object:removeSelf()
+		table.remove(Walls)
+		native.showAlert("Can't do that!", "You can't completely block off the fire", {"Ok"})
+		return false
+	end
 
 	-- Play sound effect
 	audio.play(Sounds["Place Wall"])
@@ -62,13 +61,20 @@ function Wall.new(mt, x, y, dir)
 	self.direction = dir
 
 	-- Main Object
-	self.Object = display.newLine(x * tileSize, (y + 0.5) * tileSize, (x + 1) * tileSize, (y + 0.5) * tileSize)
+	self.Object = display.newGroup()
+	self.Object.x = x * tileSize
+	self.Object.y = (y + 0.5) * tileSize
+	local top = display.newLine(self.Object, 0, 0, tileSize, 0)
+	top.strokeWidth = 3
+	local shadow = display.newLine(self.Object, 0, 0, tileSize, 0)
+	shadow.strokeWidth = 5
+	shadow:setStrokeColor(0)
+	top:toFront()
 	if dir == "vertical" then
 		self.Object.rotation = 90
 		self.Object.x = self.Object.x + tileSize / 2
 		self.Object.y = self.Object.y - tileSize / 2
 	end
-	self.Object.strokeWidth = 3
 
 	return self
 end

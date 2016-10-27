@@ -40,7 +40,8 @@ roundDisplay = display.newText({
 	align = "center"
 })
 
-HoverWallDisplay = display.newLine(MousePosition.x - tileSize, MousePosition.y + tileSize / 2, MousePosition.x, MousePosition.y + tileSize / 2)
+HoverWallDisplay = display.newLine(MousePosition.x - tileSize, MousePosition.y + tileSize / 2, MousePosition.x + 5, MousePosition.y + tileSize / 2)
+HoverWallDisplay.strokeWidth = 4
 GameplayGroup:insert(HoverWallDisplay)
 HoverWallDisplay:toFront()
 
@@ -49,7 +50,7 @@ function StartFire()
 	local newX = math.random(1, gridSize)
 	local newY = math.random(1, gridSize)
 	local thisTile = GetTileAt(newX, newY)
-	if thisTile.furniture ~= "" then
+	if thisTile.furniture ~= "" or thisTile.onFire then
 		StartFire()
 		return
 	end

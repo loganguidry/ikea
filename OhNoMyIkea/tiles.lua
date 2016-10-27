@@ -59,6 +59,7 @@ function Tile.new(mt, x, y, altColor, delay)
 					CurrentRound = CurrentRound + 1
 					roundDisplay.text = "Round " .. tostring(CurrentRound)
 					if CurrentRound >= MaxRounds and State ~= "Game Over" then
+						print("Game Over")
 						ChangeState("Game Over")
 					end
 				end
@@ -77,6 +78,7 @@ function Tile.new(mt, x, y, altColor, delay)
 						CurrentRound = CurrentRound + 1
 						roundDisplay.text = "Round " .. tostring(CurrentRound)
 						if CurrentRound >= MaxRounds and State ~= "Game Over" then
+							print("Game Over")
 							ChangeState("Game Over")
 						end
 					end
