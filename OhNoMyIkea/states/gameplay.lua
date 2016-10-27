@@ -28,7 +28,7 @@ placeWallInstructionsShadow = display.newText({
 placeWallInstructionsShadow:setFillColor(0)
 placeWallInstructions:toFront()
 
-roundDisplay = display.newText({
+--[[roundDisplay = display.newText({
 	parent = GameplayGroup,
 	text = "Round 1",
 	x = Width / 2,
@@ -38,7 +38,43 @@ roundDisplay = display.newText({
 	font = "Arial",
 	fontSize = 20,
 	align = "center"
+})]]
+
+roundDisplayGroup = display.newGroup()
+GameplayGroup:insert(roundDisplayGroup)
+roundDisplayBackground = display.newRect(roundDisplayGroup, Width / 2, 25, Width - 100, 10)
+roundDisplayBackground:setFillColor(0.5, 0, 0, 0.5)
+roundDisplay = display.newRect(roundDisplayGroup, 50, 25, (Width - 100) / 15.0, 10)
+roundDisplay.anchorX = 0
+roundDisplay:setFillColor(0, 1, 0)
+roundDisplayFiretruck = display.newImageRect(roundDisplayGroup, "images/firetruck.png", 40, 20)
+roundDisplayFiretruck.x = (Width - 100) / 15.0 + 50
+roundDisplayFiretruck.y = 12
+
+chessTimerDisplay = display.newText({
+	parent = GameplayGroup,
+	text = "15s",
+	x = Width - 30,
+	y = Height - 20,
+	w = 50,
+	h = 50,
+	font = "Arial",
+	fontSize = 32,
+	align = "left"
 })
+chessTimerDisplayShadow = display.newText({
+	parent = GameplayGroup,
+	text = chessTimerDisplay.text,
+	x = chessTimerDisplay.x + 1,
+	y = chessTimerDisplay.y + 1,
+	w = chessTimerDisplay.width,
+	h = chessTimerDisplay.height,
+	font = "Arial",
+	fontSize = 32,
+	align = "left"
+})
+chessTimerDisplayShadow:setFillColor(0)
+chessTimerDisplay:toFront()
 
 HoverWallDisplay = display.newLine(MousePosition.x - tileSize, MousePosition.y + tileSize / 2, MousePosition.x + 5, MousePosition.y + tileSize / 2)
 HoverWallDisplay.strokeWidth = 4

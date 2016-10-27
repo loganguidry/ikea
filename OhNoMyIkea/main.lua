@@ -127,6 +127,7 @@ function ChangeState(newState)
 			tile.Object:toBack()
 		end
 		HoverWallDisplay:toFront()
+		wallPlaceTimeStart = system.getTimer()
 	elseif State == "Game Over" then
 		GameplayGroup.isVisible = false
 		GameoverGroup.isVisible = true
@@ -146,7 +147,7 @@ end
 -- Code to execute every frame (60 times per second)
 local lastShakeLogoTime = 0
 local function EveryFrame(event)
-	if system.getTimer() - lastShakeLogoTime >= 8000 then
+	if State == "Player Select" and system.getTimer() - lastShakeLogoTime >= 8000 then
 		lastShakeLogoTime = system.getTimer()
 		transition.to(logoTextGroup, {
 			time = 100,
@@ -232,6 +233,63 @@ local function EveryFrame(event)
 			xScale = 1,
 			yScale = 1,
 		})
+	elseif State == "Gameplay" then
+		-- Update timer display
+		chessTimerDisplay.text = tostring(15 - math.floor((system.getTimer() - wallPlaceTimeStart) / 1000.0)) .. "s"
+		chessTimerDisplayShadow.text = chessTimerDisplay.text
+
+		-- Took too long to place a wall
+		if system.getTimer() - wallPlaceTimeStart >= 15000 then
+			-- Next player
+			CurrentPlayer = CurrentPlayer + 1
+			currentPlayer.text = "Player " .. tostring(CurrentPlayer)
+			currentPlayerShadow.text = currentPlayer.text
+
+			-- Loop around to first player
+			if CurrentPlayer > Players then
+				CurrentPlayer = 1
+				currentPlayer.text = "Player " .. tostring(CurrentPlayer)
+				currentPlayerShadow.text = currentPlayer.text
+				SpreadFire()
+				CurrentRound = CurrentRound + 1
+				roundDisplay.width = (Width - 100) / 15.0 * CurrentRound
+				roundDisplayFiretruck.x = roundDisplay.width + roundDisplay.x
+				if CurrentRound >= MaxRounds and State ~= "Game Over" then
+					print("Game Over")
+					ChangeState("Game Over")
+				end
+			end
+			while PlayerEliminated[CurrentPlayer] do
+				local allEliminated = true
+				for i, elim in ipairs(PlayerEliminated) do
+					if not elim then
+						allEliminated = false
+					end
+				end
+				if allEliminated or State == "Game Over" then break end
+				CurrentPlayer = CurrentPlayer + 1
+				if CurrentPlayer > Players then
+					CurrentPlayer = 1
+					SpreadFire()
+					CurrentRound = CurrentRound + 1
+					roundDisplay.width = (Width - 100) / 15.0 * CurrentRound
+					roundDisplayFiretruck.x = roundDisplay.width + roundDisplay.x
+					if CurrentRound >= MaxRounds and State ~= "Game Over" then
+						print("Game Over")
+						ChangeState("Game Over")
+					end
+				end
+				currentPlayer.text = "Player " .. tostring(CurrentPlayer)
+				currentPlayerShadow.text = currentPlayer.text
+			end
+
+			-- Start timer
+			wallPlaceTimeStart = system.getTimer()
+
+			-- Change player display
+			local c = PlayerColors[CurrentPlayer]
+			currentPlayer:setFillColor(c.r, c.g, c.b)
+		end
 	end
 end
 

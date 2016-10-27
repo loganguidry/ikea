@@ -1,6 +1,7 @@
 
 -- Settings and Variables
 Tiles = {}
+wallPlaceTimeStart = 0
 
 -- Tile class
 Tile = {}
@@ -48,16 +49,20 @@ function Tile.new(mt, x, y, altColor, delay)
 		elseif State == "Gameplay" then
 			successfullyPlacedWall = PlaceWall(x, y, CurrentWallDirection)
 			if successfullyPlacedWall then
+				-- Next player
 				CurrentPlayer = CurrentPlayer + 1
 				currentPlayer.text = "Player " .. tostring(CurrentPlayer)
 				currentPlayerShadow.text = currentPlayer.text
+
+				-- Loop around to first player
 				if CurrentPlayer > Players then
 					CurrentPlayer = 1
 					currentPlayer.text = "Player " .. tostring(CurrentPlayer)
 					currentPlayerShadow.text = currentPlayer.text
 					SpreadFire()
 					CurrentRound = CurrentRound + 1
-					roundDisplay.text = "Round " .. tostring(CurrentRound)
+					roundDisplay.width = (Width - 100) / 15.0 * CurrentRound
+					roundDisplayFiretruck.x = roundDisplay.width + roundDisplay.x
 					if CurrentRound >= MaxRounds and State ~= "Game Over" then
 						print("Game Over")
 						ChangeState("Game Over")
@@ -76,7 +81,8 @@ function Tile.new(mt, x, y, altColor, delay)
 						CurrentPlayer = 1
 						SpreadFire()
 						CurrentRound = CurrentRound + 1
-						roundDisplay.text = "Round " .. tostring(CurrentRound)
+						roundDisplay.width = (Width - 100) / 15.0 * CurrentRound
+						roundDisplayFiretruck.x = roundDisplay.width + roundDisplay.x
 						if CurrentRound >= MaxRounds and State ~= "Game Over" then
 							print("Game Over")
 							ChangeState("Game Over")
@@ -85,6 +91,9 @@ function Tile.new(mt, x, y, altColor, delay)
 					currentPlayer.text = "Player " .. tostring(CurrentPlayer)
 					currentPlayerShadow.text = currentPlayer.text
 				end
+
+				-- Start timer
+				wallPlaceTimeStart = system.getTimer()
 
 				-- Change player display
 				local c = PlayerColors[CurrentPlayer]
