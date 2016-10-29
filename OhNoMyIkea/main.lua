@@ -19,7 +19,7 @@ Players = 2
 State = "Player Select" --"Player Select", "Placing Furniture", "Gameplay", "Game Over"
 SelectedFurniture = ""
 MousePosition = {x = 0, y = 0}
-CurrentWallDirection = "horizontal"
+CurrentWallDirection = 0
 gridSize = Players * 2 + 10
 tileSize = (Width - 65) / gridSize
 CurrentRound = 1
@@ -65,6 +65,7 @@ currentPlayerShadow = display.newText({
 currentPlayerShadow.isVisible = false
 currentPlayerShadow:setFillColor(0)
 currentPlayer:toFront()
+
 -- Change player display
 local c = PlayerColors[CurrentPlayer]
 currentPlayer:setFillColor(c.r, c.g, c.b)
@@ -76,6 +77,7 @@ require("states.gameover")
 require("audio.audioFiles")
 require("tooltip")
 require("wallBlockage")
+require("placingWalls")
 
 -- Tile objects
 require("walls")
@@ -131,6 +133,25 @@ function ChangeState(newState)
 	elseif State == "Game Over" then
 		GameplayGroup.isVisible = false
 		GameoverGroup.isVisible = true
+	end
+end
+
+-- Rotate the hover wall display:
+function RotateHoverWallDisplay()
+	if HoverWallDisplay ~= nil then
+		if HoverWallDisplay.rotation == 0 then
+			HoverWallDisplay.x = hoverTile.x - tileSize / 2
+			HoverWallDisplay.y = hoverTile.y + tileSize / 2
+		elseif HoverWallDisplay.rotation == 90 then
+			HoverWallDisplay.x = hoverTile.x + tileSize / 2
+			HoverWallDisplay.y = hoverTile.y - tileSize / 2
+		elseif HoverWallDisplay.rotation == 180 then
+			HoverWallDisplay.x = hoverTile.x + tileSize / 2
+			HoverWallDisplay.y = hoverTile.y - tileSize / 2
+		elseif HoverWallDisplay.rotation == 270 then
+			HoverWallDisplay.x = hoverTile.x - tileSize / 2
+			HoverWallDisplay.y = hoverTile.y + tileSize / 2
+		end
 	end
 end
 
@@ -297,17 +318,89 @@ end
 local function KeyPress(event)
 	if event.phase == "down" then
 		if event.keyName == "space" then
+			-- Spread the fire
 			SpreadFire()
 		elseif event.keyName == "r" then
-			if CurrentWallDirection == "vertical" then
-				CurrentWallDirection = "horizontal"
-				HoverWallDisplay.rotation = 0
-			else
-				CurrentWallDirection = "vertical"
-				HoverWallDisplay.rotation = 90
+			-- Rotate wall
+			CurrentWallDirection = CurrentWallDirection + 90
+			if CurrentWallDirection == 360 then
+				CurrentWallDirection = 0
 			end
+			print(CurrentWallDirection)
+			HoverWallDisplay.rotation = CurrentWallDirection
+			RotateHoverWallDisplay()
 		elseif event.keyName == "m" then
+			-- Mute audio
 			audio.setVolume(0)
+		elseif event.keyName == "w" then
+			-- Cycle through walls
+			WallKindIndex = WallKindIndex + 1
+			if WallKindIndex > #WallKinds then
+				WallKindIndex = 1
+			end
+			print(WallKindIndex, WallKinds[WallKindIndex])
+
+			-- Update wall display
+			HoverWallDisplay:removeSelf()
+			HoverWallDisplay = display.newGroup()
+			HoverWallDisplay.anchorX = 0
+			HoverWallDisplay.anchorY = 0
+			HoverWallDisplay.x = MousePosition.x
+			HoverWallDisplay.y = MousePosition.y
+			GameplayGroup:insert(HoverWallDisplay)
+
+			if WallKinds[WallKindIndex] == "single" then
+				local HoverWallDisplayLine = display.newLine(HoverWallDisplay, 0, 0, tileSize, 0)
+				HoverWallDisplayLine.strokeWidth = 4
+			elseif WallKinds[WallKindIndex] == "double" then
+				local HoverWallDisplayLine = display.newLine(HoverWallDisplay, 0, 0, tileSize * 2, 0)
+				HoverWallDisplayLine.strokeWidth = 4
+			elseif WallKinds[WallKindIndex] == "corner" then
+				local HoverWallDisplayLine1 = display.newLine(HoverWallDisplay, 0, 0, tileSize, 0)
+				HoverWallDisplayLine1.strokeWidth = 4
+				local HoverWallDisplayLine2 = display.newLine(HoverWallDisplay, 0, -tileSize, 0, 0)
+				HoverWallDisplayLine2.strokeWidth = 4
+			elseif WallKinds[WallKindIndex] == "l-shape" then
+				local HoverWallDisplayLine1 = display.newLine(HoverWallDisplay, 0, 0, tileSize, 0)
+				HoverWallDisplayLine1.strokeWidth = 4
+				local HoverWallDisplayLine2 = display.newLine(HoverWallDisplay, tileSize, 0, tileSize * 2, 0)
+				HoverWallDisplayLine2.strokeWidth = 4
+				local HoverWallDisplayLine3 = display.newLine(HoverWallDisplay, 0, -tileSize, 0, 0)
+				HoverWallDisplayLine3.strokeWidth = 4
+			elseif WallKinds[WallKindIndex] == "l-shape reverse" then
+				local HoverWallDisplayLine1 = display.newLine(HoverWallDisplay, 0, 0, tileSize, 0)
+				HoverWallDisplayLine1.strokeWidth = 4
+				local HoverWallDisplayLine2 = display.newLine(HoverWallDisplay, tileSize, 0, tileSize * 2, 0)
+				HoverWallDisplayLine2.strokeWidth = 4
+				local HoverWallDisplayLine3 = display.newLine(HoverWallDisplay, 0, 0, 0, tileSize)
+				HoverWallDisplayLine3.strokeWidth = 4
+			elseif WallKinds[WallKindIndex] == "u-shape" then
+				local HoverWallDisplayLine1 = display.newLine(HoverWallDisplay, 0, 0, tileSize, 0)
+				HoverWallDisplayLine1.strokeWidth = 4
+				local HoverWallDisplayLine2 = display.newLine(HoverWallDisplay, tileSize, -tileSize, tileSize, 0)
+				HoverWallDisplayLine2.strokeWidth = 4
+				local HoverWallDisplayLine3 = display.newLine(HoverWallDisplay, 0, -tileSize, 0, 0)
+				HoverWallDisplayLine3.strokeWidth = 4
+			elseif WallKinds[WallKindIndex] == "zigzag" then
+				local HoverWallDisplayLine1 = display.newLine(HoverWallDisplay, 0, 0, tileSize, 0)
+				HoverWallDisplayLine1.strokeWidth = 4
+				local HoverWallDisplayLine2 = display.newLine(HoverWallDisplay, tileSize, -tileSize, tileSize, 0)
+				HoverWallDisplayLine2.strokeWidth = 4
+				local HoverWallDisplayLine3 = display.newLine(HoverWallDisplay, tileSize, -tileSize, tileSize * 2, -tileSize)
+				HoverWallDisplayLine3.strokeWidth = 4
+			elseif WallKinds[WallKindIndex] == "zigzag reverse" then
+				local HoverWallDisplayLine1 = display.newLine(HoverWallDisplay, 0, -tileSize, tileSize, -tileSize)
+				HoverWallDisplayLine1.strokeWidth = 4
+				local HoverWallDisplayLine2 = display.newLine(HoverWallDisplay, tileSize, -tileSize, tileSize, 0)
+				HoverWallDisplayLine2.strokeWidth = 4
+				local HoverWallDisplayLine3 = display.newLine(HoverWallDisplay, tileSize, 0, tileSize * 2, 0)
+				HoverWallDisplayLine3.strokeWidth = 4
+			end
+			HoverWallDisplay:toFront()
+
+			-- Rotate wall display
+			CurrentWallDirection = 0
+			RotateHoverWallDisplay()
 		end
 	end
 end
@@ -368,12 +461,18 @@ local function MouseEvent(event)
 		end
 	end
 	if HoverWallDisplay ~= nil then
-		if HoverWallDisplay.rotation % 180 == 0 then
+		if HoverWallDisplay.rotation == 0 then
 			HoverWallDisplay.x = hoverTile.x - tileSize / 2
 			HoverWallDisplay.y = hoverTile.y + tileSize / 2
-		else
+		elseif HoverWallDisplay.rotation == 90 then
 			HoverWallDisplay.x = hoverTile.x + tileSize / 2
 			HoverWallDisplay.y = hoverTile.y - tileSize / 2
+		elseif HoverWallDisplay.rotation == 180 then
+			HoverWallDisplay.x = hoverTile.x + tileSize / 2
+			HoverWallDisplay.y = hoverTile.y - tileSize / 2
+		elseif HoverWallDisplay.rotation == 270 then
+			HoverWallDisplay.x = hoverTile.x - tileSize / 2
+			HoverWallDisplay.y = hoverTile.y + tileSize / 2
 		end
 	end
 

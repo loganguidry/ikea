@@ -28,18 +28,6 @@ placeWallInstructionsShadow = display.newText({
 placeWallInstructionsShadow:setFillColor(0)
 placeWallInstructions:toFront()
 
---[[roundDisplay = display.newText({
-	parent = GameplayGroup,
-	text = "Round 1",
-	x = Width / 2,
-	y = 22,
-	width = Width,
-	height = 28,
-	font = "Arial",
-	fontSize = 20,
-	align = "center"
-})]]
-
 roundDisplayGroup = display.newGroup()
 GameplayGroup:insert(roundDisplayGroup)
 roundDisplayBackground = display.newRect(roundDisplayGroup, Width / 2, 25, Width - 100, 10)
@@ -76,9 +64,14 @@ chessTimerDisplayShadow = display.newText({
 chessTimerDisplayShadow:setFillColor(0)
 chessTimerDisplay:toFront()
 
-HoverWallDisplay = display.newLine(MousePosition.x - tileSize, MousePosition.y + tileSize / 2, MousePosition.x + 5, MousePosition.y + tileSize / 2)
-HoverWallDisplay.strokeWidth = 4
+HoverWallDisplay = display.newGroup()
+HoverWallDisplay.anchorX = 0
+HoverWallDisplay.anchorY = 0
+HoverWallDisplay.x = MousePosition.x
+HoverWallDisplay.y = MousePosition.y
 GameplayGroup:insert(HoverWallDisplay)
+local HoverWallDisplayLine = display.newLine(HoverWallDisplay, 0, 0, tileSize + 5, 0)
+HoverWallDisplayLine.strokeWidth = 4
 HoverWallDisplay:toFront()
 
 -- Start fire

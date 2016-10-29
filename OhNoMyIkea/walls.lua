@@ -3,24 +3,24 @@
 Walls = {}
 
 -- Place a wall
-function PlaceWall(x, y, rightOrBottomString)
+function PlaceWall(x, y, direction)
+	local placed = PlaceNewWall(WallKinds[WallKindIndex], x, y, direction)
+	if placed then audio.play(Sounds["Place Wall"]) end
+	return placed
+
+	--[[
 	-- Place wall with position locked in-between grid
 	local newX
 	local newY
-	if rightOrBottomString == "vertical" then
-		for i, wall in ipairs(Walls) do
-			if x == math.floor(wall.x) and y == math.floor(wall.y) and rightOrBottomString == wall.direction then
-				return false
-			end
+	for i, wall in ipairs(Walls) do
+		if x == math.floor(wall.x) and y == math.floor(wall.y) and rightOrBottomString == wall.direction then
+			return false
 		end
+	end
+	if rightOrBottomString == "vertical" then
 		newX = x + 0.5
 		newY = y
 	else
-		for i, wall in ipairs(Walls) do
-			if x == math.floor(wall.x) and y == math.floor(wall.y) and rightOrBottomString == wall.direction then
-				return false
-			end
-		end
 		newX = x
 		newY = y + 0.5
 	end
@@ -45,6 +45,7 @@ function PlaceWall(x, y, rightOrBottomString)
 
 	-- Successfully placed wall
 	return true
+	]]
 end
 
 -- Wall class
