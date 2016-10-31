@@ -133,6 +133,7 @@ function ChangeState(newState)
 	elseif State == "Game Over" then
 		GameplayGroup.isVisible = false
 		GameoverGroup.isVisible = true
+		displayGameOverScreen()
 	end
 end
 
