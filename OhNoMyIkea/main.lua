@@ -132,6 +132,8 @@ function ChangeState(newState)
 		wallPlaceTimeStart = system.getTimer()
 	elseif State == "Game Over" then
 		GameplayGroup.isVisible = false
+		currentPlayer.isVisible = false
+		currentPlayerShadow.isVisible = false
 		GameoverGroup.isVisible = true
 		displayGameOverScreen()
 	end

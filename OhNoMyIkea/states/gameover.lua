@@ -12,7 +12,7 @@ end
 
 gameOverHeadline = display.newText({
 	parent = GameoverGroup,
-	text = "The firetruck is here!",
+	text = "The Firetruck Is Here!",
 	x = Width / 2,
 	y = Height - 570,
 	width = Width,
@@ -66,6 +66,7 @@ playerTwo = display.newText({
 playerTwo:setFillColor(0)
 playerTwo:toFront()
 
+-----------
 
 if Players == 3 then
 	playerThree = display.newText({
@@ -83,6 +84,7 @@ playerThree:toFront()
 lineHeight = Height - 330
 end
 
+----------
 
 if Players == 4 then
 	playerThree = display.newText({
@@ -114,9 +116,12 @@ playerFour:toFront()
 lineHeight = Height - 290
 end
 
+------ LINE TO SEPARATE OVERAL $ SUM AND THE WINNER
 	local line = display.newLine(GameoverGroup, 20, lineHeight, 460, lineHeight)
 	line:setStrokeColor(0)
 	line.strokeWidth = 3
+
+------- TEXT TO CALC AND SHOW THE WINNER 
 
 	winnerPlayerText = display.newText({
 	parent = GameoverGroup,
@@ -128,14 +133,17 @@ end
 	font = "Arial",
 	fontSize = 20,
 })
+
 winnerPlayerText:setFillColor(0)
 winnerPlayerText:toFront()
 
+
+------ GAME OVER TEXT
 gameOverText = display.newText({
 	parent = GameoverGroup,
-	text = "Lets go and buy new furniture \n from IKEA and try again!",
+	text = "Time to buy new furniture from \n IKEA and try again!",
 	x = Width / 2,
-	y = lineHeight + 120,
+	y = lineHeight + 130,
 	width = Width,
 	height = 100,
 	font = "Arial",
@@ -157,9 +165,10 @@ gameOverTextShadow = display.newText({
 gameOverTextShadow:setFillColor(0)
 gameOverText:toFront()
 
+------------ BUTTON ----------------
 startOverButtonGroup = display.newGroup()
 startOverButtonGroup.x = Width / 2
-startOverButtonGroup.y = lineHeight + 170
+startOverButtonGroup.y = 100
 GameoverGroup:insert(startOverButtonGroup)
 startOverButton = display.newRoundedRect(startOverButtonGroup, 0, 0, 120, 70, 5)
 startOverButtonShadow = display.newRoundedRect(startOverButtonGroup, startOverButton.x + 1, startOverButton.y + 1, startOverButton.width, startOverButton.height, 5)
@@ -176,12 +185,12 @@ startOverButtonText = display.newText({
 	align = "center"
 	})
 startOverButtonText:setFillColor(0, 0, 0)
-FallIn(startOverButtonGroup, Height - 85, 0)
+FallIn(startOverButtonGroup, lineHeight + 210, 0)
 
 startOverButton:toFront()
 startOverButtonText:toFront()
 
-startOverButton:addEventListener("touch", StartOver)
+--startOverButton:addEventListener("touch", StartOver)
 
 
 end
