@@ -48,6 +48,20 @@ function Tile.new(mt, x, y, altColor, delay)
 
 		elseif State == "Gameplay" then
 			successfullyPlacedWall = PlaceWall(x, y, CurrentWallDirection)
+
+			-- Check if multi-tile wall blocked off fire
+			local notBlocked = CheckWallsForBlockage()
+			if not notBlocked then
+				successfullyPlacedWall = false
+				for i, wallIndex in ipairs(TryingToPlaceWallsIndexes) do
+					Walls[#Walls].Object:removeSelf()
+					table.remove(Walls)
+				end
+				native.showAlert("Can't do that!", "You can't completely block off the fire", {"Ok"})
+			end
+			TryingToPlaceWalls = false
+			TryingToPlaceWallsIndexes = {}
+
 			if successfullyPlacedWall then
 				-- Next player
 				CurrentPlayer = CurrentPlayer + 1
@@ -63,6 +77,16 @@ function Tile.new(mt, x, y, altColor, delay)
 					CurrentRound = CurrentRound + 1
 					roundDisplay.width = (Width - 100) / 15.0 * CurrentRound
 					roundDisplayFiretruck.x = roundDisplay.width + roundDisplay.x
+					local allOnFire = true
+					for i, tile in ipairs(Tiles) do
+						if tile.furniture ~= "" and not tile.onFire then
+							allOnFire = false
+						end
+					end
+					if allOnFire then
+						LoseGame = true
+						ChangeState("Game Over")
+					end
 					if CurrentRound >= MaxRounds and State ~= "Game Over" then
 						print("Game Over")
 						ChangeState("Game Over")
@@ -83,6 +107,16 @@ function Tile.new(mt, x, y, altColor, delay)
 						CurrentRound = CurrentRound + 1
 						roundDisplay.width = (Width - 100) / 15.0 * CurrentRound
 						roundDisplayFiretruck.x = roundDisplay.width + roundDisplay.x
+						local allOnFire = true
+						for i, tile in ipairs(Tiles) do
+							if tile.furniture ~= "" and not tile.onFire then
+								allOnFire = false
+							end
+						end
+						if allOnFire then
+							LoseGame = true
+							ChangeState("Game Over")
+						end
 						if CurrentRound >= MaxRounds and State ~= "Game Over" then
 							print("Game Over")
 							ChangeState("Game Over")

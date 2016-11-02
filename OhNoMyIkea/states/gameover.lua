@@ -1,18 +1,41 @@
 
--- OBJECTS
 GameoverGroup = display.newGroup()
-GameoverGroup.isVisible = false
 
 local lineHeight = Height - 370
 
-local function StartOver(event)
+--[[local function StartOver(event)
 	ChangeState("Player Select")
+	GameoverGroup:removeSelf()
+	GameoverGroup = display.newGroup()
+	PlayerScores = {0, 0, 0, 0}
+	Players = 2
+	CurrentPlayer = 1
+	SelectedFurniture = ""
+	CurrentWallDirection = 0
+	RotateHoverWallDisplay()
+	CurrentRound = 1
+	roundDisplay.width = (Width - 100) / 15.0 * CurrentRound
+	roundDisplayFiretruck.x = roundDisplay.width + roundDisplay.x
+	PlayerEliminated = {
+		false, false, false, false
+	}
+	PlayerScores = {0, 0, 0, 0}
+	LoseGame = false
+end]]
 
+
+function displayGameOverScreen()
+
+GameoverGroup = display.newGroup()
+
+local gameOverTxt = "The Firetruck is Here!"
+if LoseGame then
+	gameOverTxt = "All your furniture burnt!"
 end
 
 gameOverHeadline = display.newText({
 	parent = GameoverGroup,
-	text = "The Firetruck Is Here!",
+	text = gameOverTxt,
 	x = Width / 2,
 	y = Height - 570,
 	width = Width,
@@ -38,11 +61,9 @@ gameOverHeadline:setFillColor(1,0,0)
 
 gameOverHeadline:toFront()
 
-
-function displayGameOverScreen()
 playerOne = display.newText({
 	parent = GameoverGroup,
-	text = "Player 1 Saved: $",
+	text = "Player 1 Saved: $" .. tostring(PlayerScores[1]),
 	x = 280,
 	y = Height - 440,
 	width = Width,
@@ -55,7 +76,7 @@ playerOne:toFront()
 
 playerTwo = display.newText({
 	parent = GameoverGroup,
-	text = "Player 2 Saved: $",
+	text = "Player 2 Saved: $" .. tostring(PlayerScores[2]),
 	x = 280,
 	y = Height - 400,
 	width = Width,
@@ -71,7 +92,7 @@ playerTwo:toFront()
 if Players == 3 then
 	playerThree = display.newText({
 	parent = GameoverGroup,
-	text = "Player 3 Saved: $",
+	text = "Player 3 Saved: $" .. tostring(PlayerScores[3]),
 	x = 280,
 	y = Height - 360,
 	width = Width,
@@ -89,7 +110,7 @@ end
 if Players == 4 then
 	playerThree = display.newText({
 	parent = GameoverGroup,
-	text = "Player 3 Saved: $",
+	text = "Player 3 Saved: $" .. tostring(PlayerScores[3]),
 	x = 280,
 	y = Height - 360,
 	width = Width,
@@ -102,7 +123,7 @@ playerThree:toFront()
 
 	playerFour = display.newText({
 	parent = GameoverGroup,
-	text = "Player 4 Saved: $",
+	text = "Player 4 Saved: $" .. tostring(PlayerScores[4]),
 	x = 280,
 	y = Height - 320,
 	width = Width,
@@ -123,9 +144,43 @@ end
 
 ------- TEXT TO CALC AND SHOW THE WINNER 
 
-	winnerPlayerText = display.newText({
+-- calculate the winner
+local maxScore = 0
+local winners = {}
+for i, score in ipairs(PlayerScores) do
+	if Players >= i then
+		if score > maxScore then
+			for i = 1, #winners do
+				table.remove(winners)
+			end
+			table.insert(winners, i)
+			maxScore = score
+		elseif score == maxScore and score > 0 then
+			table.insert(winners, i)
+		end
+	end
+end
+
+local winText = "Winner:"
+local theresAwinner = false
+for i, winner in ipairs(winners) do
+	print(winner)
+	if winner ~= 0 then
+		theresAwinner = true
+		winText = winText .. " Player " .. tostring(winner) .. ","
+	end
+end
+if winText == "Winners:" or maxScore == 0 then
+	winText = "Nobody Wins!"
+	theresAwinner = false
+end
+if theresAwinner then
+	winText = winText:sub(1, -2)
+end
+
+winnerPlayerText = display.newText({
 	parent = GameoverGroup,
-	text = "Winner: Player ",
+	text = winText,
 	x = 280,
 	y = lineHeight + 30,
 	width = Width,
@@ -165,7 +220,7 @@ gameOverTextShadow = display.newText({
 gameOverTextShadow:setFillColor(0)
 gameOverText:toFront()
 
------------- BUTTON ----------------
+--[[---------- BUTTON ----------------
 startOverButtonGroup = display.newGroup()
 startOverButtonGroup.x = Width / 2
 startOverButtonGroup.y = 100
@@ -190,8 +245,35 @@ FallIn(startOverButtonGroup, lineHeight + 210, 0)
 startOverButton:toFront()
 startOverButtonText:toFront()
 
---startOverButton:addEventListener("touch", StartOver)
+startOverButton:addEventListener("touch", StartOver)]]
 
+startOverText = display.newText({
+	parent = GameoverGroup,
+	text = "Press CMD+R to Play Again!",
+	x = Width / 2,
+	y = lineHeight + 280,
+	width = Width,
+	height = 40,
+	font = "Arial",
+	fontSize = 28,
+	align = "center"
+})
+startOverText:setFillColor(1, 0.25, 0.25)
+startOverTextShadow = display.newText({
+	parent = GameoverGroup,
+	text = startOverText.text,
+	x = startOverText.x + 1,
+	y = startOverText.y + 1,
+	width = startOverText.width,
+	height = startOverText.height,
+	font = "Arial",
+	fontSize = 28,
+	align = "center"
+})
+startOverTextShadow:setFillColor(0)
+startOverText:toFront()
+FallIn(startOverText, lineHeight + 200, 0)
+FallIn(startOverTextShadow, lineHeight + 201, 0)
 
 end
 

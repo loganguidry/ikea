@@ -27,6 +27,10 @@ MaxRounds = 15
 PlayerEliminated = {
 	false, false, false, false
 }
+PlayerScores = {0, 0, 0, 0}
+LoseGame = false
+TryingToPlaceWalls = false
+TryingToPlaceWallsIndexes = {}
 local hoverTile = {x = 0, y = 0}
 
 -- Background Object
@@ -85,6 +89,7 @@ require("tiles")
 
 -- Changing states
 function ChangeState(newState)
+	print(State .. " --> " .. newState)
 	if State == "Player Select" then
 		PlayerSelectionGroup.isVisible = false
 		currentPlayer.isVisible = true
@@ -92,11 +97,21 @@ function ChangeState(newState)
 		CreateGrid()
 	elseif State == "Placing Furniture" then
 		PlaceFurnitureGroup.isVisible = false
-		currentFurnitureHover:removeSelf()
-		currentFurnitureHover = nil
+		if currentFurnitureHover ~= nil then
+			currentFurnitureHover:removeSelf()
+			currentFurnitureHover = nil
+		end
 	elseif State == "Gameplay" then
 		GameplayGroup.isVisible = false
 		for i = #Tiles, 1, -1 do
+			-- Get player scores
+			if not Tiles[i].onFire then
+				if Tiles[i].furniture ~= "" then
+					PlayerScores[Tiles[i].furniturePlayer] = PlayerScores[Tiles[i].furniturePlayer] + 25
+				end
+			end
+
+			-- Remove tile
 			Tiles[i].Object:removeSelf()
 			Tiles[i].Fire:removeSelf()
 			if Tiles[i].Sprite ~= nil then
@@ -129,12 +144,13 @@ function ChangeState(newState)
 			tile.Object:toBack()
 		end
 		HoverWallDisplay:toFront()
+		CurrentWallDirection = 0
+		RotateHoverWallDisplay()
 		wallPlaceTimeStart = system.getTimer()
 	elseif State == "Game Over" then
 		GameplayGroup.isVisible = false
 		currentPlayer.isVisible = false
 		currentPlayerShadow.isVisible = false
-		GameoverGroup.isVisible = true
 		displayGameOverScreen()
 	end
 end
@@ -261,6 +277,41 @@ local function EveryFrame(event)
 		-- Update timer display
 		chessTimerDisplay.text = tostring(15 - math.floor((system.getTimer() - wallPlaceTimeStart) / 1000.0)) .. "s"
 		chessTimerDisplayShadow.text = chessTimerDisplay.text
+
+		-- Blink timer
+		local setChessTimerVisibility = true
+		if system.getTimer() - wallPlaceTimeStart >= 10000 then
+			setChessTimerVisibility = true
+		end
+		if system.getTimer() - wallPlaceTimeStart >= 10500 then
+			setChessTimerVisibility = false
+		end
+		if system.getTimer() - wallPlaceTimeStart >= 11000 then
+			setChessTimerVisibility = true
+		end
+		if system.getTimer() - wallPlaceTimeStart >= 11500 then
+			setChessTimerVisibility = false
+		end
+		if system.getTimer() - wallPlaceTimeStart >= 12000 then
+			setChessTimerVisibility = true
+		end
+		if system.getTimer() - wallPlaceTimeStart >= 12500 then
+			setChessTimerVisibility = false
+		end
+		if system.getTimer() - wallPlaceTimeStart >= 13000 then
+			setChessTimerVisibility = true
+		end
+		if system.getTimer() - wallPlaceTimeStart >= 13500 then
+			setChessTimerVisibility = false
+		end
+		if system.getTimer() - wallPlaceTimeStart >= 14000 then
+			setChessTimerVisibility = true
+		end
+		if system.getTimer() - wallPlaceTimeStart >= 14500 then
+			setChessTimerVisibility = false
+		end
+		chessTimerDisplay.isVisible = setChessTimerVisibility
+		chessTimerDisplayShadow.isVisible = setChessTimerVisibility
 
 		-- Took too long to place a wall
 		if system.getTimer() - wallPlaceTimeStart >= 15000 then

@@ -4,26 +4,29 @@ WallKindIndex = 1
 WallKinds = {"single", "double", "corner", "l-shape", "l-shape reverse", "u-shape", "zigzag", "zigzag reverse"}
 
 function PlaceNewWall(kind, x, y, rot)
+	TryingToPlaceWalls = true
+	TryingToPlaceWallsIndexes = {}
+	local successfullyPlacedWall = false
 	if kind == "single" then
 		if rot == 0 then
 			if CanPlaceWallAt(x, y, "horizontal") then
 				PutDownNewWall(x, y, "horizontal")
-				return true
+				successfullyPlacedWall = true
 			end
 		elseif rot == 90 then
 			if CanPlaceWallAt(x, y, "vertical") then
 				PutDownNewWall(x, y, "vertical")
-				return true
+				successfullyPlacedWall = true
 			end
 		elseif rot == 180 then
 			if CanPlaceWallAt(x, y - 1, "horizontal") then
 				PutDownNewWall(x, y - 1, "horizontal")
-				return true
+				successfullyPlacedWall = true
 			end
 		elseif rot == 270 then
 			if CanPlaceWallAt(x - 1, y, "vertical") then
 				PutDownNewWall(x - 1, y, "vertical")
-				return true
+				successfullyPlacedWall = true
 			end
 		end
 
@@ -32,25 +35,25 @@ function PlaceNewWall(kind, x, y, rot)
 			if CanPlaceWallAt(x, y, "horizontal") and CanPlaceWallAt(x + 1, y, "horizontal") then
 				PutDownNewWall(x, y, "horizontal")
 				PutDownNewWall(x + 1, y, "horizontal")
-				return true
+				successfullyPlacedWall = true
 			end
 		elseif rot == 90 then
 			if CanPlaceWallAt(x, y, "vertical") and CanPlaceWallAt(x, y + 1, "vertical") then
 				PutDownNewWall(x, y, "vertical")
 				PutDownNewWall(x, y + 1, "vertical")
-				return true
+				successfullyPlacedWall = true
 			end
 		elseif rot == 180 then
 			if CanPlaceWallAt(x, y - 1, "horizontal") and CanPlaceWallAt(x - 1, y - 1, "horizontal") then
 				PutDownNewWall(x, y - 1, "horizontal")
 				PutDownNewWall(x - 1, y - 1, "horizontal")
-				return true
+				successfullyPlacedWall = true
 			end
 		elseif rot == 270 then
 			if CanPlaceWallAt(x - 1, y, "vertical") and CanPlaceWallAt(x - 1, y - 1, "vertical") then
 				PutDownNewWall(x - 1, y, "vertical")
 				PutDownNewWall(x - 1, y - 1, "vertical")
-				return true
+				successfullyPlacedWall = true
 			end
 		end
 
@@ -59,25 +62,25 @@ function PlaceNewWall(kind, x, y, rot)
 			if CanPlaceWallAt(x, y, "horizontal") and CanPlaceWallAt(x - 1, y, "vertical") then
 				PutDownNewWall(x, y, "horizontal")
 				PutDownNewWall(x - 1, y, "vertical")
-				return true
+				successfullyPlacedWall = true
 			end
 		elseif rot == 90 then
 			if CanPlaceWallAt(x + 1, y - 1, "horizontal") and CanPlaceWallAt(x, y, "vertical") then
 				PutDownNewWall(x + 1, y - 1, "horizontal")
 				PutDownNewWall(x, y, "vertical")
-				return true
+				successfullyPlacedWall = true
 			end
 		elseif rot == 180 then
 			if CanPlaceWallAt(x, y - 1, "horizontal") and CanPlaceWallAt(x, y, "vertical") then
 				PutDownNewWall(x, y - 1, "horizontal")
 				PutDownNewWall(x, y, "vertical")
-				return true
+				successfullyPlacedWall = true
 			end
 		elseif rot == 270 then
 			if CanPlaceWallAt(x - 1, y, "horizontal") and CanPlaceWallAt(x - 1, y, "vertical") then
 				PutDownNewWall(x - 1, y, "horizontal")
 				PutDownNewWall(x - 1, y, "vertical")
-				return true
+				successfullyPlacedWall = true
 			end
 		end
 
@@ -87,28 +90,28 @@ function PlaceNewWall(kind, x, y, rot)
 				PutDownNewWall(x - 1, y, "vertical")
 				PutDownNewWall(x, y, "horizontal")
 				PutDownNewWall(x + 1, y, "horizontal")
-				return true
+				successfullyPlacedWall = true
 			end
 		elseif rot == 90 then
 			if CanPlaceWallAt(x, y, "vertical") and CanPlaceWallAt(x, y + 1, "vertical") and CanPlaceWallAt(x + 1, y - 1, "horizontal") then
 				PutDownNewWall(x, y, "vertical")
 				PutDownNewWall(x, y + 1, "vertical")
 				PutDownNewWall(x + 1, y - 1, "horizontal")
-				return true
+				successfullyPlacedWall = true
 			end
 		elseif rot == 180 then
 			if CanPlaceWallAt(x, y, "vertical") and CanPlaceWallAt(x, y - 1, "horizontal") and CanPlaceWallAt(x - 1, y - 1, "horizontal") then
 				PutDownNewWall(x, y, "vertical")
 				PutDownNewWall(x, y - 1, "horizontal")
 				PutDownNewWall(x - 1, y - 1, "horizontal")
-				return true
+				successfullyPlacedWall = true
 			end
 		elseif rot == 270 then
 			if CanPlaceWallAt(x - 1, y, "horizontal") and CanPlaceWallAt(x - 1, y, "vertical") and CanPlaceWallAt(x - 1, y - 1, "vertical") then
 				PutDownNewWall(x - 1, y, "horizontal")
 				PutDownNewWall(x - 1, y, "vertical")
 				PutDownNewWall(x - 1, y - 1, "vertical")
-				return true
+				successfullyPlacedWall = true
 			end
 		end
 
@@ -118,28 +121,28 @@ function PlaceNewWall(kind, x, y, rot)
 				PutDownNewWall(x - 1, y + 1, "vertical")
 				PutDownNewWall(x, y, "horizontal")
 				PutDownNewWall(x + 1, y, "horizontal")
-				return true
+				successfullyPlacedWall = true
 			end
 		elseif rot == 90 then
 			if CanPlaceWallAt(x, y, "vertical") and CanPlaceWallAt(x, y + 1, "vertical") and CanPlaceWallAt(x + 1, y - 1, "horizontal") then
 				PutDownNewWall(x, y, "vertical")
 				PutDownNewWall(x, y + 1, "vertical")
 				PutDownNewWall(x, y - 1, "horizontal")
-				return true
+				successfullyPlacedWall = true
 			end
 		elseif rot == 180 then
 			if CanPlaceWallAt(x, y - 1, "vertical") and CanPlaceWallAt(x, y - 1, "horizontal") and CanPlaceWallAt(x - 1, y - 1, "horizontal") then
 				PutDownNewWall(x, y - 1, "vertical")
 				PutDownNewWall(x, y - 1, "horizontal")
 				PutDownNewWall(x - 1, y - 1, "horizontal")
-				return true
+				successfullyPlacedWall = true
 			end
 		elseif rot == 270 then
 			if CanPlaceWallAt(x, y, "horizontal") and CanPlaceWallAt(x - 1, y, "vertical") and CanPlaceWallAt(x - 1, y - 1, "vertical") then
 				PutDownNewWall(x, y, "horizontal")
 				PutDownNewWall(x - 1, y, "vertical")
 				PutDownNewWall(x - 1, y - 1, "vertical")
-				return true
+				successfullyPlacedWall = true
 			end
 		end
 
@@ -149,28 +152,28 @@ function PlaceNewWall(kind, x, y, rot)
 				PutDownNewWall(x, y, "horizontal")
 				PutDownNewWall(x - 1, y, "vertical")
 				PutDownNewWall(x, y, "vertical")
-				return true
+				successfullyPlacedWall = true
 			end
 		elseif rot == 90 then
 			if CanPlaceWallAt(x, y, "vertical") and CanPlaceWallAt(x + 1, y, "horizontal") and CanPlaceWallAt(x + 1, y - 1, "horizontal") then
 				PutDownNewWall(x, y, "vertical")
 				PutDownNewWall(x + 1, y, "horizontal")
 				PutDownNewWall(x + 1, y - 1, "horizontal")
-				return true
+				successfullyPlacedWall = true
 			end
 		elseif rot == 180 then
 			if CanPlaceWallAt(x, y, "horizontal") and CanPlaceWallAt(x - 1, y, "vertical") and CanPlaceWallAt(x, y, "vertical") then
 				PutDownNewWall(x, y - 1, "horizontal")
 				PutDownNewWall(x - 1, y, "vertical")
 				PutDownNewWall(x, y, "vertical")
-				return true
+				successfullyPlacedWall = true
 			end
 		elseif rot == 270 then
 			if CanPlaceWallAt(x - 1, y, "vertical") and CanPlaceWallAt(x - 1, y, "horizontal") and CanPlaceWallAt(x - 1, y - 1, "horizontal") then
 				PutDownNewWall(x - 1, y, "vertical")
 				PutDownNewWall(x - 1, y, "horizontal")
 				PutDownNewWall(x - 1, y - 1, "horizontal")
-				return true
+				successfullyPlacedWall = true
 			end
 		end
 
@@ -180,28 +183,28 @@ function PlaceNewWall(kind, x, y, rot)
 				PutDownNewWall(x, y, "horizontal")
 				PutDownNewWall(x, y, "vertical")
 				PutDownNewWall(x + 1, y - 1, "horizontal")
-				return true
+				successfullyPlacedWall = true
 			end
 		elseif rot == 90 then
 			if CanPlaceWallAt(x, y, "vertical") and CanPlaceWallAt(x + 1, y, "horizontal") and CanPlaceWallAt(x + 1, y + 1, "vertical") then
 				PutDownNewWall(x, y, "vertical")
 				PutDownNewWall(x + 1, y, "horizontal")
 				PutDownNewWall(x + 1, y + 1, "vertical")
-				return true
+				successfullyPlacedWall = true
 			end
 		elseif rot == 180 then
 			if CanPlaceWallAt(x - 1, y, "vertical") and CanPlaceWallAt(x, y - 1, "horizontal") and CanPlaceWallAt(x - 1, y, "horizontal") then
 				PutDownNewWall(x - 1, y, "vertical")
 				PutDownNewWall(x, y - 1, "horizontal")
 				PutDownNewWall(x - 1, y, "horizontal")
-				return true
+				successfullyPlacedWall = true
 			end
 		elseif rot == 270 then
 			if CanPlaceWallAt(x - 1, y, "vertical") and CanPlaceWallAt(x - 1, y - 1, "horizontal") and CanPlaceWallAt(x - 2, y - 1, "vertical") then
 				PutDownNewWall(x - 1, y, "vertical")
 				PutDownNewWall(x - 1, y - 1, "horizontal")
 				PutDownNewWall(x - 2, y - 1, "vertical")
-				return true
+				successfullyPlacedWall = true
 			end
 		end
 
@@ -211,28 +214,28 @@ function PlaceNewWall(kind, x, y, rot)
 				PutDownNewWall(x, y, "vertical")
 				PutDownNewWall(x, y - 1, "horizontal")
 				PutDownNewWall(x + 1, y, "horizontal")
-				return true
+				successfullyPlacedWall = true
 			end
 		elseif rot == 90 then
 			if CanPlaceWallAt(x + 1, y, "vertical") and CanPlaceWallAt(x + 1, y, "horizontal") and CanPlaceWallAt(x, y + 1, "vertical") then
 				PutDownNewWall(x + 1, y, "vertical")
 				PutDownNewWall(x + 1, y, "horizontal")
 				PutDownNewWall(x, y + 1, "vertical")
-				return true
+				successfullyPlacedWall = true
 			end
 		elseif rot == 180 then
 			if CanPlaceWallAt(x, y, "vertical") and CanPlaceWallAt(x - 1, y, "vertical") and CanPlaceWallAt(x - 1, y - 1, "horizontal") then
 				PutDownNewWall(x, y, "horizontal")
 				PutDownNewWall(x - 1, y, "vertical")
 				PutDownNewWall(x - 1, y - 1, "horizontal")
-				return true
+				successfullyPlacedWall = true
 			end
 		elseif rot == 270 then
 			if CanPlaceWallAt(x - 2, y, "vertical") and CanPlaceWallAt(x - 1, y - 1, "horizontal") and CanPlaceWallAt(x - 1, y - 1, "vertical") then
 				PutDownNewWall(x - 2, y, "vertical")
 				PutDownNewWall(x - 1, y - 1, "horizontal")
 				PutDownNewWall(x - 1, y - 1, "vertical")
-				return true
+				successfullyPlacedWall = true
 			end
 		end
 
@@ -240,8 +243,8 @@ function PlaceNewWall(kind, x, y, rot)
 		print("[ERROR in placingWalls.lua PlaceNewWall()] " .. tostring(kind) .. " isn't a valid wall type!")
 	end
 
-	-- Couldn't place wall
-	return false
+	-- Placed wall?
+	return successfullyPlacedWall
 end
 
 function CanPlaceWallAt(x, y, rot)
@@ -278,4 +281,7 @@ function PutDownNewWall(x, y, rot)
 
 	-- Create wall
 	table.insert(Walls, Wall:new(x, y, rot))
+
+	-- Insert index into try list
+	table.insert(TryingToPlaceWallsIndexes, #Walls)
 end
