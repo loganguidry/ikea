@@ -82,6 +82,7 @@ require("audio.audioFiles")
 require("tooltip")
 require("wallBlockage")
 require("placingWalls")
+require("chooseWall")
 
 -- Tile objects
 require("walls")
@@ -147,10 +148,14 @@ function ChangeState(newState)
 		CurrentWallDirection = 0
 		RotateHoverWallDisplay()
 		wallPlaceTimeStart = system.getTimer()
+		CreateWallButtons()
+		SelectNewWall("single")
 	elseif State == "Game Over" then
+		HoverWallDisplay.isVisible = false
 		GameplayGroup.isVisible = false
 		currentPlayer.isVisible = false
 		currentPlayerShadow.isVisible = false
+		WallButtonGroup.isVisible = false
 		displayGameOverScreen()
 	end
 end
@@ -187,6 +192,10 @@ end
 -- Code to execute every frame (60 times per second)
 local lastShakeLogoTime = 0
 local function EveryFrame(event)
+	if HoverWallDisplay ~= nil then
+		HoverWallDisplay:toFront()
+	end
+
 	if State == "Player Select" and system.getTimer() - lastShakeLogoTime >= 8000 then
 		lastShakeLogoTime = system.getTimer()
 		transition.to(logoTextGroup, {
@@ -373,7 +382,7 @@ local function KeyPress(event)
 	if event.phase == "down" then
 		if event.keyName == "space" then
 			-- Spread the fire
-			SpreadFire()
+			--SpreadFire()
 		elseif event.keyName == "r" then
 			-- Rotate wall
 			CurrentWallDirection = CurrentWallDirection + 90
@@ -387,7 +396,7 @@ local function KeyPress(event)
 			-- Mute audio
 			audio.setVolume(0)
 		elseif event.keyName == "w" then
-			-- Cycle through walls
+			--[[ Cycle through walls
 			WallKindIndex = WallKindIndex + 1
 			if WallKindIndex > #WallKinds then
 				WallKindIndex = 1
@@ -455,6 +464,7 @@ local function KeyPress(event)
 			-- Rotate wall display
 			CurrentWallDirection = 0
 			RotateHoverWallDisplay()
+			]]
 		end
 	end
 end
