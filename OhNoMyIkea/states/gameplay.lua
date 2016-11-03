@@ -457,12 +457,20 @@ function SpreadFire()
 	end
 	for i, tile in ipairs(catchFireTo) do
 		if not tile.onFire then
+			-- Catch this tile on fire
 			tile.onFire = true
 			tile.Fire.isVisible = true
 			tile.Fire:toFront()
+
+			-- Catch furniture on fire
 			if tile.furniture ~= "" then
+				for j, otherFurnitureTiles in ipairs(tile.allFurniturePositions) do
+					local thisTile = GetTileAt(otherFurnitureTiles.x, otherFurnitureTiles.y)
+					thisTile.onFire = true
+					thisTile.Fire.isVisible = true
+					thisTile.Fire:toFront()
+				end
 				print("Player " .. tostring(tile.furniturePlayer) .. "'s " .. tile.furniture .. " burst into flames!")
-				--PlayerEliminated[tile.furniturePlayer] = true
 			end
 		end
 	end

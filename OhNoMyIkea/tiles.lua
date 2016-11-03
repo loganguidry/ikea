@@ -18,6 +18,7 @@ function Tile.new(mt, x, y, altColor, delay)
 	self.furniture = ""
 	self.furniturePlayer = 0
 	self.reached = false
+	self.allFurniturePositions = {}
 
 	-- Main Object
 	self.Object = display.newRect(tileGroup, (x + 0.5) * tileSize, (y + 0.5) * tileSize, tileSize - 1, tileSize - 1)
@@ -186,73 +187,7 @@ function GetTileAt(x, y)
 			return tile
 		end
 	end
+	return nil
 end
 
-function PlaceFurniture(furniture, x, y, tile)
-	if furniture == "Couch" then
-		--[[local deltaX = 1
-		if x == gridSize then deltaX = -1 end
-		if tile.furniture ~= "" then return end
-		if GetTileAt(x + deltaX, y).furniture ~= "" then return end
-		tile.furniture = "Couch"
-		tile.furniturePlayer = CurrentPlayer
-		GetTileAt(x + deltaX, y).furniture = "Couch"
-		GetTileAt(x + deltaX, y).furniturePlayer = CurrentPlayer
-		tile.Object:setFillColor(0.5, 0.2, 0.05)
-		GetTileAt(x + deltaX, y).Object:setFillColor(0.5, 0.2, 0.05)]]
 
-	elseif furniture == "Side Table" then
-		if tile.furniture ~= "" then return end
-		tile.furniture = "Side Table"
-		tile.furniturePlayer = CurrentPlayer
-
-		tile.Sprite = display.newImageRect(tileGroup, "images/sidetable.png", tileSize, tileSize)
-		tile.Sprite.x = tile.Object.x
-		tile.Sprite.y = tile.Object.y
-		tile.Sprite.alpha = 0
-		tile.Sprite.xScale = 2
-		tile.Sprite.yScale = 2
-		transition.to(tile.Sprite, {
-			time = 250,
-			transition = easing.inOutSine,
-			alpha = 1,
-			xScale = 1,
-			yScale = 1
-		})
-
-		local c = PlayerColors[CurrentPlayer]
-		tile.Object:setFillColor(c.r, c.g, c.b, 0.3)
-		tile.Fire:toFront()
-
-	elseif furniture == "Coffee Table" then
-		--print("placing coffee table at tile (" .. tostring(x) .. ", " .. tostring(y) .. ")")
-	end
-
-	-- Move on to next player
-	PlayerFurnitures[CurrentPlayer] = PlayerFurnitures[CurrentPlayer] + 1
-	if PlayerFurnitures[CurrentPlayer] >= 3 then
-		CurrentPlayer = CurrentPlayer + 1
-		currentPlayer.text = "Player " .. tostring(CurrentPlayer)
-		currentPlayerShadow.text = currentPlayer.text
-		if CurrentPlayer > Players then
-			CurrentPlayer = 1
-			currentPlayer.text = "Player " .. tostring(CurrentPlayer)
-			currentPlayerShadow.text = currentPlayer.text
-			ChangeState("Gameplay")
-		end
-		local c = PlayerColors[CurrentPlayer]
-		currentPlayer:setFillColor(c.r, c.g, c.b)
-	end
-
-	-- Add to furniture list
-	local tileIndex = -1
-	for i, tile in ipairs(Tiles) do
-		if tile.x == x and tile.y == y then
-			tileIndex = i
-		end
-	end
-	table.insert(FurnitureTileIndexes, tileIndex)
-
-	-- Play sound effect
-	audio.play(Sounds["Place Furniture"])
-end

@@ -21,6 +21,7 @@ State = "Player Select" --"Player Select", "Placing Furniture", "Gameplay", "Gam
 SelectedFurniture = ""
 MousePosition = {x = 0, y = 0}
 CurrentWallDirection = 0
+furnitureRotation = 0
 gridSize = Players * 2 + 10
 tileSize = (Width - 65) / gridSize
 CurrentRound = 1
@@ -132,6 +133,7 @@ require("placingWalls")
 require("chooseWall")
 require("placingWallPopup")
 require("outtaTimePopup")
+require("placeFurniture")
 
 -- Tile objects
 require("walls")
@@ -463,13 +465,25 @@ local function KeyPress(event)
 			-- Spread the fire
 			--SpreadFire()
 		elseif event.keyName == "r" then
-			-- Rotate wall
-			CurrentWallDirection = CurrentWallDirection + 90
-			if CurrentWallDirection == 360 then
-				CurrentWallDirection = 0
+			if State == "Placing Furniture" then
+				-- Rotate furniture
+				furnitureRotation = furnitureRotation + 90
+				if furnitureRotation == 360 then
+					furnitureRotation = 0
+				end
+				if currentFurnitureHover ~= nil then
+					currentFurnitureHover.rotation = furnitureRotation
+				end
+				print(furnitureRotation)
+			elseif State == "Gameplay" then
+				-- Rotate wall
+				CurrentWallDirection = CurrentWallDirection + 90
+				if CurrentWallDirection == 360 then
+					CurrentWallDirection = 0
+				end
+				HoverWallDisplay.rotation = CurrentWallDirection
+				RotateHoverWallDisplay()
 			end
-			HoverWallDisplay.rotation = CurrentWallDirection
-			RotateHoverWallDisplay()
 		elseif event.keyName == "m" then
 			-- Mute audio
 			audio.setVolume(0)

@@ -39,11 +39,11 @@ gameOverHeadline = display.newText({
 	parent = GameoverGroup,
 	text = gameOverTxt,
 	x = Width / 2,
-	y = Height - 570,
+	y = Height - 560,
 	width = Width - 24,
-	height = 45,
+	height = 86,
 	font = "Arial",
-	fontSize = 45,
+	fontSize = 42,
 	align = "center"
 })
 
@@ -55,7 +55,7 @@ gameOverHeadlineShadow = display.newText({
 	width = gameOverHeadline.width,
 	height = gameOverHeadline.height,
 	font = "Arial",
-	fontSize = 45,
+	fontSize = 42,
 	align = "center"
 })
 gameOverHeadlineShadow:setFillColor(0)

@@ -3,9 +3,7 @@
 local function SelectFurniture(furniture)
 	if furniture == SelectedFurniture then
 		SelectedFurniture = ""
-		--couchButtonSelected.isVisible = false
 		sidetableButtonSelected.isVisible = false
-		--tableButtonSelected.isVisible = false
 		if currentFurnitureHover ~= nil then
 			currentFurnitureHover:removeSelf()
 			currentFurnitureHover = nil
@@ -16,21 +14,48 @@ local function SelectFurniture(furniture)
 			currentFurnitureHover = nil
 		end
 		SelectedFurniture = furniture
-		--couchButtonSelected.isVisible = false
 		sidetableButtonSelected.isVisible = false
-		--tableButtonSelected.isVisible = false
-		if furniture == "Couch" then
-			--couchButtonSelected.isVisible = true
-			--currentFurnitureHover = display.newRect(MousePosition.x, MousePosition.y, tileSize * 2, tileSize)
-			--currentFurnitureHover:setFillColor(0.4, 0.1, 0.025)
-		elseif furniture == "Side Table" then
+		tvstandButtonSelected.isVisible = false
+		sectionalButtonSelected.isVisible = false
+		bedButtonSelected.isVisible = false
+		islandButtonSelected.isVisible = false
+		if furniture == "Side Table" then
 			sidetableButtonSelected.isVisible = true
 			currentFurnitureHover = display.newImageRect("images/sidetable.png", tileSize, tileSize)
 			currentFurnitureHover.x = MousePosition.x
 			currentFurnitureHover.y = MousePosition.y
-		elseif furniture == "Coffee Table" then
-			--tableButtonSelected.isVisible = true
+			currentFurnitureHover.anchorX = 0.5
+			currentFurnitureHover.anchorY = 0.5
+		elseif furniture == "TV Stand" then
+			tvstandButtonSelected.isVisible = true
+			currentFurnitureHover = display.newImageRect("images/tv.png", tileSize, tileSize * 2)
+			currentFurnitureHover.x = MousePosition.x
+			currentFurnitureHover.y = MousePosition.y
+			currentFurnitureHover.anchorX = 0.5
+			currentFurnitureHover.anchorY = 0.75
+		elseif furniture == "Bed" then
+			bedButtonSelected.isVisible = true
+			currentFurnitureHover = display.newImageRect("images/bed.png", tileSize * 2, tileSize * 2)
+			currentFurnitureHover.x = MousePosition.x
+			currentFurnitureHover.y = MousePosition.y
+			currentFurnitureHover.anchorX = 0.75
+			currentFurnitureHover.anchorY = 0.75
+		elseif furniture == "Kitchen Island" then
+			islandButtonSelected.isVisible = true
+			currentFurnitureHover = display.newImageRect("images/island.png", tileSize, tileSize * 3)
+			currentFurnitureHover.x = MousePosition.x
+			currentFurnitureHover.y = MousePosition.y
+			currentFurnitureHover.anchorX = 0.5
+			currentFurnitureHover.anchorY = 0.5
+		elseif furniture == "Couch" then
+			sectionalButtonSelected.isVisible = true
+			currentFurnitureHover = display.newImageRect("images/couch.png", tileSize * 2, tileSize * 3)
+			currentFurnitureHover.x = MousePosition.x
+			currentFurnitureHover.y = MousePosition.y
+			currentFurnitureHover.anchorX = 0.75
+			currentFurnitureHover.anchorY = 0.83333
 		end
+		furnitureRotation = 0
 	end
 end
 
@@ -63,25 +88,7 @@ placeFurnitureInstructionsShadow = display.newText({
 placeFurnitureInstructionsShadow:setFillColor(0)
 placeFurnitureInstructions:toFront()
 
---[[couchButton = display.newRoundedRect(PlaceFurnitureGroup, Width / 4 + 50, Height - 70, 60, 60, 5)
-couchButton:setFillColor(1, 1, 1, 0.25)
-couchButtonText = display.newText({
-	parent = PlaceFurnitureGroup,
-	text = "Couch [DISABLED]",
-	x = couchButton.x,
-	y = couchButton.y + 2,
-	width = couchButton.width,
-	height = 22,
-	font = "Arial",
-	fontSize = 10,
-	align = "center"
-})
-couchButtonText:setFillColor(0.5, 0, 0, 0.5)
-couchButtonSelected = display.newRoundedRect(PlaceFurnitureGroup, couchButton.x, couchButton.y, couchButton.width, couchButton.height, 5)
-couchButtonSelected:setFillColor(0, 0.5, 0, 0.4)
-couchButtonSelected.isVisible = false]]
-
-sidetableButton = display.newRoundedRect(PlaceFurnitureGroup, Width / 2, Height - 70, 60, 60, 5)
+sidetableButton = display.newRoundedRect(PlaceFurnitureGroup, Width / 2 - 140, Height - 70, 60, 60, 5)
 sidetableButtonText = display.newText({
 	parent = PlaceFurnitureGroup,
 	text = "Side Table",
@@ -98,23 +105,73 @@ sidetableButtonSelected = display.newRoundedRect(PlaceFurnitureGroup, sidetableB
 sidetableButtonSelected:setFillColor(0, 0.5, 0, 0.4)
 sidetableButtonSelected.isVisible = false
 
---[[tableButton = display.newRoundedRect(PlaceFurnitureGroup, Width / 4 * 3 - 50, Height - 70, 60, 60, 5)
-tableButton:setFillColor(1, 1, 1, 0.25)
-tableButtonText = display.newText({
+tvstandButton = display.newRoundedRect(PlaceFurnitureGroup, Width / 2 - 70, Height - 70, 60, 60, 5)
+tvstandButtonText = display.newText({
 	parent = PlaceFurnitureGroup,
-	text = "TV [DISABLED]",
-	x = tableButton.x,
-	y = tableButton.y + 2,
-	width = tableButton.width,
-	height = 22,
+	text = "TV Stand",
+	x = tvstandButton.x,
+	y = tvstandButton.y + 10,
+	width = tvstandButton.width,
+	height = 58,
 	font = "Arial",
-	fontSize = 10,
+	fontSize = 18,
 	align = "center"
 })
-tableButtonText:setFillColor(0.5, 0, 0, 0.5)
-tableButtonSelected = display.newRoundedRect(PlaceFurnitureGroup, tableButton.x, tableButton.y, tableButton.width, tableButton.height, 5)
-tableButtonSelected:setFillColor(0, 0.5, 0, 0.4)
-tableButtonSelected.isVisible = false]]
+tvstandButtonText:setFillColor(0, 0, 0)
+tvstandButtonSelected = display.newRoundedRect(PlaceFurnitureGroup, tvstandButton.x, tvstandButton.y, tvstandButton.width, tvstandButton.height, 5)
+tvstandButtonSelected:setFillColor(0, 0.5, 0, 0.4)
+tvstandButtonSelected.isVisible = false
+
+sectionalButton = display.newRoundedRect(PlaceFurnitureGroup, Width / 2, Height - 70, 60, 60, 5)
+sectionalButtonText = display.newText({
+	parent = PlaceFurnitureGroup,
+	text = "Couch",
+	x = sectionalButton.x,
+	y = sectionalButton.y + 18,
+	width = sectionalButton.width,
+	height = 58,
+	font = "Arial",
+	fontSize = 18,
+	align = "center"
+})
+sectionalButtonText:setFillColor(0, 0, 0)
+sectionalButtonSelected = display.newRoundedRect(PlaceFurnitureGroup, sectionalButton.x, sectionalButton.y, sectionalButton.width, sectionalButton.height, 5)
+sectionalButtonSelected:setFillColor(0, 0.5, 0, 0.4)
+sectionalButtonSelected.isVisible = false
+
+bedButton = display.newRoundedRect(PlaceFurnitureGroup, Width / 2 + 70, Height - 70, 60, 60, 5)
+bedButtonText = display.newText({
+	parent = PlaceFurnitureGroup,
+	text = "Bed",
+	x = bedButton.x,
+	y = bedButton.y + 18,
+	width = bedButton.width,
+	height = 58,
+	font = "Arial",
+	fontSize = 18,
+	align = "center"
+})
+bedButtonText:setFillColor(0, 0, 0)
+bedButtonSelected = display.newRoundedRect(PlaceFurnitureGroup, bedButton.x, bedButton.y, bedButton.width, bedButton.height, 5)
+bedButtonSelected:setFillColor(0, 0.5, 0, 0.4)
+bedButtonSelected.isVisible = false
+
+islandButton = display.newRoundedRect(PlaceFurnitureGroup, Width / 2 + 140, Height - 70, 60, 60, 5)
+islandButtonText = display.newText({
+	parent = PlaceFurnitureGroup,
+	text = "Kitchen Island",
+	x = islandButton.x,
+	y = islandButton.y + 10,
+	width = islandButton.width,
+	height = 58,
+	font = "Arial",
+	fontSize = 17,
+	align = "center"
+})
+islandButtonText:setFillColor(0, 0, 0)
+islandButtonSelected = display.newRoundedRect(PlaceFurnitureGroup, islandButton.x, islandButton.y, islandButton.width, islandButton.height, 5)
+islandButtonSelected:setFillColor(0, 0.5, 0, 0.4)
+islandButtonSelected.isVisible = false
 
 doneButton = display.newRoundedRect(PlaceFurnitureGroup, Width - 25, Height - 25, 40, 30, 5)
 doneButton:setFillColor(0, 0.5, 0, 0.4)
@@ -134,18 +191,26 @@ doneButtonText:setFillColor(0)
 currentFurnitureHover = nil
 
 -- EVENT LISTENERS
---couchButton:addEventListener("touch", function(e)
-	--if e.phase ~= "began" then return end
-	--SelectFurniture("Couch")
---end)
+tvstandButton:addEventListener("touch", function(e)
+	if e.phase ~= "began" then return end
+	SelectFurniture("TV Stand")
+end)
 sidetableButton:addEventListener("touch", function(e)
 	if e.phase ~= "began" then return end
 	SelectFurniture("Side Table")
 end)
---tableButton:addEventListener("touch", function(e)
-	--if e.phase ~= "began" then return end
-	--SelectFurniture("Coffee Table")
---end)
+sectionalButton:addEventListener("touch", function(e)
+	if e.phase ~= "began" then return end
+	SelectFurniture("Couch")
+end)
+bedButton:addEventListener("touch", function(e)
+	if e.phase ~= "began" then return end
+	SelectFurniture("Bed")
+end)
+islandButton:addEventListener("touch", function(e)
+	if e.phase ~= "began" then return end
+	SelectFurniture("Kitchen Island")
+end)
 doneButton:addEventListener("touch", function(e)
 	if e.phase ~= "began" then return end
 	if PlayerFurnitures[CurrentPlayer] == 0 then print ("Player has 0 furniture");return end
