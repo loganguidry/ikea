@@ -86,6 +86,7 @@ require("wallBlockage")
 require("placingWalls")
 require("chooseWall")
 require("placingWallPopup")
+require("outtaTimePopup")
 
 -- Tile objects
 require("walls")
@@ -322,11 +323,26 @@ local function EveryFrame(event)
 		if system.getTimer() - wallPlaceTimeStart >= 14500 then
 			setChessTimerVisibility = false
 		end
+		if outOfTimeGroup.isVisible then
+			setChessTimerVisibility = false
+		end
 		chessTimerDisplay.isVisible = setChessTimerVisibility
 		chessTimerDisplayShadow.isVisible = setChessTimerVisibility
 
 		-- Took too long to place a wall
 		if system.getTimer() - wallPlaceTimeStart >= 15000 then
+			-- Show popup
+			outOfTimeGroup:toFront()
+			outOfTimeGroup.isVisible = true
+			chessTimerDisplay.isVisible = false
+			chessTimerDisplayShadow.isVisible = false
+			timer.performWithDelay(3000, function()
+				outOfTimeGroup.isVisible = false
+				chessTimerDisplay.isVisible = true
+				chessTimerDisplayShadow.isVisible = true
+				wallPlaceTimeStart = system.getTimer()
+			end)
+
 			-- Next player
 			CurrentPlayer = CurrentPlayer + 1
 			currentPlayer.text = "Player " .. tostring(CurrentPlayer)

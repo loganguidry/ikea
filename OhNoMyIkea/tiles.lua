@@ -39,6 +39,7 @@ function Tile.new(mt, x, y, altColor, delay)
 	-- On tap
 	self.Object:addEventListener("touch", function(e)
 		if e.phase ~= "began" then return end
+		if outOfTimeGroup.isVisible then return end
 
 		-- Place furniture
 		if State == "Placing Furniture" then

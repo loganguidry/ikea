@@ -3,6 +3,7 @@ placingWallGroup = display.newGroup()
 placingWallGroup.x = Width / 2
 placingWallGroup.y = Height / 2
 placingWallGroup.isVisible = false
+GameplayGroup:insert(placingWallGroup)
 local placingWallBG = display.newRect(placingWallGroup, 0, 0, Width, Height)
 placingWallBG:setFillColor(0, 0, 0, 0.15)
 local placingWallText = display.newText({
