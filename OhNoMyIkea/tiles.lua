@@ -47,6 +47,9 @@ function Tile.new(mt, x, y, altColor, delay)
 			end
 
 		elseif State == "Gameplay" then
+			placingWallGroup.isVisible = true
+			placingWallGroup:toFront()
+			timer.performWithDelay(20, function()
 			successfullyPlacedWall = PlaceWall(x, y, CurrentWallDirection)
 
 			-- Check if multi-tile wall blocked off fire
@@ -77,9 +80,11 @@ function Tile.new(mt, x, y, altColor, delay)
 					CurrentRound = CurrentRound + 1
 					roundDisplay.width = (Width - 100) / 15.0 * CurrentRound
 					roundDisplayFiretruck.x = roundDisplay.width + roundDisplay.x
+
+					-- Check if all furniture is burnt
 					local allOnFire = true
-					for i, tile in ipairs(Tiles) do
-						if tile.furniture ~= "" and not tile.onFire then
+					for i, furnIndex in ipairs(FurnitureTileIndexes) do
+						if Tiles[furnIndex].furniture ~= "" and not Tiles[furnIndex].onFire then
 							allOnFire = false
 						end
 					end
@@ -87,19 +92,14 @@ function Tile.new(mt, x, y, altColor, delay)
 						LoseGame = true
 						ChangeState("Game Over")
 					end
+
 					if CurrentRound >= MaxRounds and State ~= "Game Over" then
 						print("Game Over")
 						ChangeState("Game Over")
 					end
 				end
 				while PlayerEliminated[CurrentPlayer] do
-					local allEliminated = true
-					for i, elim in ipairs(PlayerEliminated) do
-						if not elim then
-							allEliminated = false
-						end
-					end
-					if allEliminated or State == "Game Over" then break end
+					if State == "Game Over" then break end
 					CurrentPlayer = CurrentPlayer + 1
 					if CurrentPlayer > Players then
 						CurrentPlayer = 1
@@ -107,9 +107,11 @@ function Tile.new(mt, x, y, altColor, delay)
 						CurrentRound = CurrentRound + 1
 						roundDisplay.width = (Width - 100) / 15.0 * CurrentRound
 						roundDisplayFiretruck.x = roundDisplay.width + roundDisplay.x
+
+						-- Check if all furniture is burnt
 						local allOnFire = true
-						for i, tile in ipairs(Tiles) do
-							if tile.furniture ~= "" and not tile.onFire then
+						for i, furnIndex in ipairs(FurnitureTileIndexes) do
+							if Tiles[furnIndex].furniture ~= "" and not Tiles[furnIndex].onFire then
 								allOnFire = false
 							end
 						end
@@ -117,6 +119,7 @@ function Tile.new(mt, x, y, altColor, delay)
 							LoseGame = true
 							ChangeState("Game Over")
 						end
+
 						if CurrentRound >= MaxRounds and State ~= "Game Over" then
 							print("Game Over")
 							ChangeState("Game Over")
@@ -133,7 +136,8 @@ function Tile.new(mt, x, y, altColor, delay)
 				local c = PlayerColors[CurrentPlayer]
 				currentPlayer:setFillColor(c.r, c.g, c.b)
 			end
-			
+			placingWallGroup.isVisible = false
+			end)
 		end
 	end)
 
@@ -164,7 +168,7 @@ end
 
 function PlaceFurniture(furniture, x, y, tile)
 	if furniture == "Couch" then
-		local deltaX = 1
+		--[[local deltaX = 1
 		if x == gridSize then deltaX = -1 end
 		if tile.furniture ~= "" then return end
 		if GetTileAt(x + deltaX, y).furniture ~= "" then return end
@@ -173,7 +177,7 @@ function PlaceFurniture(furniture, x, y, tile)
 		GetTileAt(x + deltaX, y).furniture = "Couch"
 		GetTileAt(x + deltaX, y).furniturePlayer = CurrentPlayer
 		tile.Object:setFillColor(0.5, 0.2, 0.05)
-		GetTileAt(x + deltaX, y).Object:setFillColor(0.5, 0.2, 0.05)
+		GetTileAt(x + deltaX, y).Object:setFillColor(0.5, 0.2, 0.05)]]
 
 	elseif furniture == "Side Table" then
 		if tile.furniture ~= "" then return end
@@ -198,21 +202,33 @@ function PlaceFurniture(furniture, x, y, tile)
 		tile.Object:setFillColor(c.r, c.g, c.b, 0.3)
 
 	elseif furniture == "Coffee Table" then
-		print("placing coffee table at tile (" .. tostring(x) .. ", " .. tostring(y) .. ")")
+		--print("placing coffee table at tile (" .. tostring(x) .. ", " .. tostring(y) .. ")")
 	end
 
 	-- Move on to next player
-	CurrentPlayer = CurrentPlayer + 1
-	currentPlayer.text = "Player " .. tostring(CurrentPlayer)
-	currentPlayerShadow.text = currentPlayer.text
-	if CurrentPlayer > Players then
-		CurrentPlayer = 1
+	PlayerFurnitures[CurrentPlayer] = PlayerFurnitures[CurrentPlayer] + 1
+	if PlayerFurnitures[CurrentPlayer] >= 3 then
+		CurrentPlayer = CurrentPlayer + 1
 		currentPlayer.text = "Player " .. tostring(CurrentPlayer)
 		currentPlayerShadow.text = currentPlayer.text
-		ChangeState("Gameplay")
+		if CurrentPlayer > Players then
+			CurrentPlayer = 1
+			currentPlayer.text = "Player " .. tostring(CurrentPlayer)
+			currentPlayerShadow.text = currentPlayer.text
+			ChangeState("Gameplay")
+		end
+		local c = PlayerColors[CurrentPlayer]
+		currentPlayer:setFillColor(c.r, c.g, c.b)
 	end
-	local c = PlayerColors[CurrentPlayer]
-	currentPlayer:setFillColor(c.r, c.g, c.b)
+
+	-- Add to furniture list
+	local tileIndex = -1
+	for i, tile in ipairs(Tiles) do
+		if tile.x == x and tile.y == y then
+			tileIndex = i
+		end
+	end
+	table.insert(FurnitureTileIndexes, tileIndex)
 
 	-- Play sound effect
 	audio.play(Sounds["Place Furniture"])

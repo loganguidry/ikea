@@ -28,9 +28,11 @@ PlayerEliminated = {
 	false, false, false, false
 }
 PlayerScores = {0, 0, 0, 0}
+PlayerFurnitures = {0, 0, 0, 0}
 LoseGame = false
 TryingToPlaceWalls = false
 TryingToPlaceWallsIndexes = {}
+FurnitureTileIndexes = {}
 local hoverTile = {x = 0, y = 0}
 
 -- Background Object
@@ -83,6 +85,7 @@ require("tooltip")
 require("wallBlockage")
 require("placingWalls")
 require("chooseWall")
+require("placingWallPopup")
 
 -- Tile objects
 require("walls")

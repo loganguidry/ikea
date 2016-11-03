@@ -21,8 +21,8 @@ local function SelectFurniture(furniture)
 		--tableButtonSelected.isVisible = false
 		if furniture == "Couch" then
 			--couchButtonSelected.isVisible = true
-			currentFurnitureHover = display.newRect(MousePosition.x, MousePosition.y, tileSize * 2, tileSize)
-			currentFurnitureHover:setFillColor(0.4, 0.1, 0.025)
+			--currentFurnitureHover = display.newRect(MousePosition.x, MousePosition.y, tileSize * 2, tileSize)
+			--currentFurnitureHover:setFillColor(0.4, 0.1, 0.025)
 		elseif furniture == "Side Table" then
 			sidetableButtonSelected.isVisible = true
 			currentFurnitureHover = display.newImageRect("images/sidetable.png", tileSize, tileSize)

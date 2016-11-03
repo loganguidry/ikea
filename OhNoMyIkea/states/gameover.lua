@@ -30,7 +30,7 @@ GameoverGroup = display.newGroup()
 
 local gameOverTxt = "The Firetruck is Here!"
 if LoseGame then
-	gameOverTxt = "All your furniture burnt!"
+	gameOverTxt = "All your furniture caught on fire!"
 end
 
 gameOverHeadline = display.newText({

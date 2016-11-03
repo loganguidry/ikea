@@ -410,8 +410,32 @@ function SpreadFire()
 			tile.Fire:toFront()
 			if tile.furniture ~= "" then
 				print("Player " .. tostring(tile.furniturePlayer) .. "'s " .. tile.furniture .. " burst into flames!")
-				PlayerEliminated[tile.furniturePlayer] = true
+				--PlayerEliminated[tile.furniturePlayer] = true
 			end
 		end
+	end
+
+	for thisPlayer = 1, Players do
+		if not PlayerEliminated[thisPlayer] then
+			local thisPlayerAllFurnBurnt = true
+			for i, tile in ipairs(Tiles) do
+				if tile.furniturePlayer == thisPlayer and not tile.onFire then
+					thisPlayerAllFurnBurnt = false
+				end
+			end
+			if thisPlayerAllFurnBurnt then
+				PlayerEliminated[thisPlayer] = true
+			end
+		end
+	end
+
+	local allEliminated = true
+	for i, elim in ipairs(PlayerEliminated) do
+		if not elim then
+			allEliminated = false
+		end
+	end
+	if allEliminated then
+		ChangeState("Game Over")
 	end
 end
