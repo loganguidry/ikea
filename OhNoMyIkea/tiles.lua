@@ -50,6 +50,19 @@ function Tile.new(mt, x, y, altColor, delay)
 			end
 
 		elseif State == "Gameplay" then
+			-- Check if player can place wall
+			if PlayerPlacedWall[CurrentPlayer][WallKinds[WallKindIndex]] then
+				print("Can't place another of the same wall")
+				native.showAlert("Can't place wall", "You've already placed this shape wall. Players only have an infinite number of single-shaped walls.", {"Ok"})
+				return
+			else
+				if WallKinds[WallKindIndex] ~= "single" then
+					PlayerPlacedWall[CurrentPlayer][WallKinds[WallKindIndex]] = true
+				end
+			end
+			disableWallButtons()
+
+			-- Place wall
 			placingWallGroup.isVisible = true
 			placingWallGroup:toFront()
 			timer.performWithDelay(20, function()
@@ -104,6 +117,7 @@ function Tile.new(mt, x, y, altColor, delay)
 						ChangeState("Game Over")
 					end
 				end
+				disableWallButtons()
 				while PlayerEliminated[CurrentPlayer] do
 					if State == "Game Over" then break end
 					CurrentPlayer = CurrentPlayer + 1
@@ -132,6 +146,7 @@ function Tile.new(mt, x, y, altColor, delay)
 							ChangeState("Game Over")
 						end
 					end
+					disableWallButtons()
 					currentPlayer.text = "Player " .. tostring(CurrentPlayer)
 					currentPlayerShadow.text = currentPlayer.text
 				end

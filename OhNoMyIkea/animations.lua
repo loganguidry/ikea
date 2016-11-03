@@ -71,8 +71,6 @@ function FallIn(obj, yPos, del)
 		y = yPos,
 		transition = easing.outBack
 	})
-
-	print(yPos, obj)
 end
 
 function InLeft(obj, xPos, del)

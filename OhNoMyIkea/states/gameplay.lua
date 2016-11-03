@@ -4,6 +4,26 @@ GameplayGroup = display.newGroup()
 GameplayGroup.isVisible = false
 GameplayGroup:toFront()
 
+enabledButtonsGroup = {}
+disabledButtonsGroup = {}
+local wallBtn_single_buttonDisabled
+local wallBtn_double_buttonDisabled
+local wallBtn_corner_buttonDisabled
+local wallBtn_lshape_buttonDisabled
+local wallBtn_lshapereverse_buttonDisabled
+local wallBtn_ushape_buttonDisabled
+local wallBtn_zigzag_buttonDisabled
+local wallBtn_zigzagreverse_buttonDisabled
+function disableWallButtons()
+	wallBtn_double_buttonDisabled.isVisible = PlayerPlacedWall[CurrentPlayer]["double"]
+	wallBtn_corner_buttonDisabled.isVisible = PlayerPlacedWall[CurrentPlayer]["corner"]
+	wallBtn_lshape_buttonDisabled.isVisible = PlayerPlacedWall[CurrentPlayer]["l-shape"]
+	wallBtn_lshapereverse_buttonDisabled.isVisible =  PlayerPlacedWall[CurrentPlayer]["l-shape reverse"]
+	wallBtn_ushape_buttonDisabled.isVisible =  PlayerPlacedWall[CurrentPlayer]["u-shape"]
+	wallBtn_zigzag_buttonDisabled.isVisible = PlayerPlacedWall[CurrentPlayer]["zigzag"]
+	wallBtn_zigzagreverse_buttonDisabled.isVisible = PlayerPlacedWall[CurrentPlayer]["zigzag reverse"]
+end
+
 placeWallInstructions = display.newText({
 	parent = GameplayGroup,
 	text = "Place a wall to protect your furniture.\nPress R to rotate wall.",
@@ -80,7 +100,6 @@ function CreateWallButtons()
 	WallButtonGroup = display.newGroup()
 	WallButtonGroup.x = Width / 2 - 3
 	WallButtonGroup.y = Height - 95
-	local enabledButtonsGroup = {}
 
 	local wallBtn_single = display.newGroup()
 	wallBtn_single.x = -Width / 2 + 50
@@ -102,6 +121,10 @@ function CreateWallButtons()
 	wallBtn_single_buttonEnabled:setFillColor(0, 0.5, 0, 0.4)
 	wallBtn_single_buttonEnabled.isVisible = true
 	table.insert(enabledButtonsGroup, wallBtn_single_buttonEnabled)
+	wallBtn_single_buttonDisabled = display.newRoundedRect(wallBtn_single, wallBtn_single_buttonTop.x, wallBtn_single_buttonTop.y, wallBtn_single_buttonTop.width, wallBtn_single_buttonTop.height, 5)
+	wallBtn_single_buttonDisabled:setFillColor(0, 0, 0, 0.4)
+	wallBtn_single_buttonDisabled.isVisible = false
+	table.insert(disabledButtonsGroup, wallBtn_single_buttonDisabled)
 	RotateIn(wallBtn_single, 0, "right")
 	wallBtn_single_buttonTop:addEventListener("touch", function(e)
 		if e.phase ~= "began" then return end
@@ -132,6 +155,10 @@ function CreateWallButtons()
 	wallBtn_double_buttonEnabled:setFillColor(0, 0.5, 0, 0.4)
 	wallBtn_double_buttonEnabled.isVisible = false
 	table.insert(enabledButtonsGroup, wallBtn_double_buttonEnabled)
+	wallBtn_double_buttonDisabled = display.newRoundedRect(wallBtn_double, wallBtn_double_buttonTop.x, wallBtn_double_buttonTop.y, wallBtn_double_buttonTop.width, wallBtn_double_buttonTop.height, 5)
+	wallBtn_double_buttonDisabled:setFillColor(0, 0, 0, 0.4)
+	wallBtn_double_buttonDisabled.isVisible = false
+	table.insert(disabledButtonsGroup, wallBtn_double_buttonDisabled)
 	RotateIn(wallBtn_double, 100, "right")
 	wallBtn_double_buttonTop:addEventListener("touch", function(e)
 		if e.phase ~= "began" then return end
@@ -162,6 +189,10 @@ function CreateWallButtons()
 	wallBtn_corner_buttonEnabled:setFillColor(0, 0.5, 0, 0.4)
 	wallBtn_corner_buttonEnabled.isVisible = false
 	table.insert(enabledButtonsGroup, wallBtn_corner_buttonEnabled)
+	wallBtn_corner_buttonDisabled = display.newRoundedRect(wallBtn_corner, wallBtn_corner_buttonTop.x, wallBtn_corner_buttonTop.y, wallBtn_corner_buttonTop.width, wallBtn_corner_buttonTop.height, 5)
+	wallBtn_corner_buttonDisabled:setFillColor(0, 0, 0, 0.4)
+	wallBtn_corner_buttonDisabled.isVisible = false
+	table.insert(disabledButtonsGroup, wallBtn_corner_buttonDisabled)
 	RotateIn(wallBtn_corner, 200, "right")
 	wallBtn_corner_buttonTop:addEventListener("touch", function(e)
 		if e.phase ~= "began" then return end
@@ -192,6 +223,10 @@ function CreateWallButtons()
 	wallBtn_lshape_buttonEnabled:setFillColor(0, 0.5, 0, 0.4)
 	wallBtn_lshape_buttonEnabled.isVisible = false
 	table.insert(enabledButtonsGroup, wallBtn_lshape_buttonEnabled)
+	wallBtn_lshape_buttonDisabled = display.newRoundedRect(wallBtn_lshape, wallBtn_lshape_buttonTop.x, wallBtn_lshape_buttonTop.y, wallBtn_lshape_buttonTop.width, wallBtn_lshape_buttonTop.height, 5)
+	wallBtn_lshape_buttonDisabled:setFillColor(0, 0, 0, 0.4)
+	wallBtn_lshape_buttonDisabled.isVisible = false
+	table.insert(disabledButtonsGroup, wallBtn_lshape_buttonDisabled)
 	RotateIn(wallBtn_lshape, 300, "right")
 	wallBtn_lshape_buttonTop:addEventListener("touch", function(e)
 		if e.phase ~= "began" then return end
@@ -222,6 +257,10 @@ function CreateWallButtons()
 	wallBtn_lshapereverse_buttonEnabled:setFillColor(0, 0.5, 0, 0.4)
 	wallBtn_lshapereverse_buttonEnabled.isVisible = false
 	table.insert(enabledButtonsGroup, wallBtn_lshapereverse_buttonEnabled)
+	wallBtn_lshapereverse_buttonDisabled = display.newRoundedRect(wallBtn_lshapereverse, wallBtn_lshapereverse_buttonTop.x, wallBtn_lshapereverse_buttonTop.y, wallBtn_lshapereverse_buttonTop.width, wallBtn_lshapereverse_buttonTop.height, 5)
+	wallBtn_lshapereverse_buttonDisabled:setFillColor(0, 0, 0, 0.4)
+	wallBtn_lshapereverse_buttonDisabled.isVisible = false
+	table.insert(disabledButtonsGroup, wallBtn_lshapereverse_buttonDisabled)
 	RotateIn(wallBtn_lshapereverse, 400, "right")
 	wallBtn_lshapereverse_buttonTop:addEventListener("touch", function(e)
 		if e.phase ~= "began" then return end
@@ -252,6 +291,10 @@ function CreateWallButtons()
 	wallBtn_ushape_buttonTop_buttonEnabled:setFillColor(0, 0.5, 0, 0.4)
 	wallBtn_ushape_buttonTop_buttonEnabled.isVisible = false
 	table.insert(enabledButtonsGroup, wallBtn_ushape_buttonTop_buttonEnabled)
+	wallBtn_ushape_buttonDisabled = display.newRoundedRect(wallBtn_ushape, wallBtn_ushape_buttonTop.x, wallBtn_ushape_buttonTop.y, wallBtn_ushape_buttonTop.width, wallBtn_ushape_buttonTop.height, 5)
+	wallBtn_ushape_buttonDisabled:setFillColor(0, 0, 0, 0.4)
+	wallBtn_ushape_buttonDisabled.isVisible = false
+	table.insert(disabledButtonsGroup, wallBtn_ushape_buttonDisabled)
 	RotateIn(wallBtn_ushape, 500, "right")
 	wallBtn_ushape_buttonTop:addEventListener("touch", function(e)
 		if e.phase ~= "began" then return end
@@ -282,6 +325,10 @@ function CreateWallButtons()
 	wallBtn_zigzag_buttonTop_buttonEnabled:setFillColor(0, 0.5, 0, 0.4)
 	wallBtn_zigzag_buttonTop_buttonEnabled.isVisible = false
 	table.insert(enabledButtonsGroup, wallBtn_zigzag_buttonTop_buttonEnabled)
+	wallBtn_zigzag_buttonDisabled = display.newRoundedRect(wallBtn_zigzag, wallBtn_zigzag_buttonTop.x, wallBtn_zigzag_buttonTop.y, wallBtn_zigzag_buttonTop.width, wallBtn_zigzag_buttonTop.height, 5)
+	wallBtn_zigzag_buttonDisabled:setFillColor(0, 0, 0, 0.4)
+	wallBtn_zigzag_buttonDisabled.isVisible = false
+	table.insert(disabledButtonsGroup, wallBtn_zigzag_buttonDisabled)
 	RotateIn(wallBtn_zigzag, 500, "right")
 	wallBtn_zigzag_buttonTop:addEventListener("touch", function(e)
 		if e.phase ~= "began" then return end
@@ -312,6 +359,10 @@ function CreateWallButtons()
 	wallBtn_zigzagreverse_buttonTop_buttonEnabled:setFillColor(0, 0.5, 0, 0.4)
 	wallBtn_zigzagreverse_buttonTop_buttonEnabled.isVisible = false
 	table.insert(enabledButtonsGroup, wallBtn_zigzagreverse_buttonTop_buttonEnabled)
+	wallBtn_zigzagreverse_buttonDisabled = display.newRoundedRect(wallBtn_zigzagreverse, wallBtn_zigzagreverse_buttonTop.x, wallBtn_zigzagreverse_buttonTop.y, wallBtn_zigzagreverse_buttonTop.width, wallBtn_zigzagreverse_buttonTop.height, 5)
+	wallBtn_zigzagreverse_buttonDisabled:setFillColor(0, 0, 0, 0.4)
+	wallBtn_zigzagreverse_buttonDisabled.isVisible = false
+	table.insert(disabledButtonsGroup, wallBtn_zigzagreverse_buttonDisabled)
 	RotateIn(wallBtn_zigzagreverse, 500, "right")
 	wallBtn_zigzagreverse_buttonTop:addEventListener("touch", function(e)
 		if e.phase ~= "began" then return end

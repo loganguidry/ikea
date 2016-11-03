@@ -34,6 +34,48 @@ LoseGame = false
 TryingToPlaceWalls = false
 TryingToPlaceWallsIndexes = {}
 FurnitureTileIndexes = {}
+PlayerPlacedWall = {
+	{
+		["single"] = false,
+		["double"] = false,
+		["corner"] = false,
+		["l-shape"] = false,
+		["l-shape reverse"] = false,
+		["u-shape"] = false,
+		["zigzag"] = false,
+		["zigzag reverse"] = false
+	},
+	{
+		["single"] = false,
+		["double"] = false,
+		["corner"] = false,
+		["l-shape"] = false,
+		["l-shape reverse"] = false,
+		["u-shape"] = false,
+		["zigzag"] = false,
+		["zigzag reverse"] = false
+	},
+	{
+		["single"] = false,
+		["double"] = false,
+		["corner"] = false,
+		["l-shape"] = false,
+		["l-shape reverse"] = false,
+		["u-shape"] = false,
+		["zigzag"] = false,
+		["zigzag reverse"] = false
+	},
+	{
+		["single"] = false,
+		["double"] = false,
+		["corner"] = false,
+		["l-shape"] = false,
+		["l-shape reverse"] = false,
+		["u-shape"] = false,
+		["zigzag"] = false,
+		["zigzag reverse"] = false
+	},
+}
 local hoverTile = {x = 0, y = 0}
 
 -- Background Object
@@ -378,6 +420,7 @@ local function EveryFrame(event)
 					ChangeState("Game Over")
 				end
 			end
+			disableWallButtons()
 			while PlayerEliminated[CurrentPlayer] do
 				local allEliminated = true
 				for i, elim in ipairs(PlayerEliminated) do
@@ -398,6 +441,7 @@ local function EveryFrame(event)
 						ChangeState("Game Over")
 					end
 				end
+				disableWallButtons()
 				currentPlayer.text = "Player " .. tostring(CurrentPlayer)
 				currentPlayerShadow.text = currentPlayer.text
 			end
@@ -417,14 +461,13 @@ local function KeyPress(event)
 	if event.phase == "down" then
 		if event.keyName == "space" then
 			-- Spread the fire
-			SpreadFire()
+			--SpreadFire()
 		elseif event.keyName == "r" then
 			-- Rotate wall
 			CurrentWallDirection = CurrentWallDirection + 90
 			if CurrentWallDirection == 360 then
 				CurrentWallDirection = 0
 			end
-			print(CurrentWallDirection)
 			HoverWallDisplay.rotation = CurrentWallDirection
 			RotateHoverWallDisplay()
 		elseif event.keyName == "m" then
