@@ -1,4 +1,6 @@
 
+tileGroup = display.newGroup()
+
 -- Settings and Variables
 Tiles = {}
 wallPlaceTimeStart = 0
@@ -18,7 +20,7 @@ function Tile.new(mt, x, y, altColor, delay)
 	self.reached = false
 
 	-- Main Object
-	self.Object = display.newRect((x + 0.5) * tileSize, (y + 0.5) * tileSize, tileSize - 1, tileSize - 1)
+	self.Object = display.newRect(tileGroup, (x + 0.5) * tileSize, (y + 0.5) * tileSize, tileSize - 1, tileSize - 1)
 	self.Object.strokeWidth = 2
 	self.Object:setStrokeColor(0, 0, 0, 0)
 	self.Object:setFillColor(0.35, 0.35, 0.35, 0.25)
@@ -31,7 +33,7 @@ function Tile.new(mt, x, y, altColor, delay)
 	self.Sprite = nil
 
 	-- Fire Object
-	self.Fire = display.newImageRect("images/fire.png", tileSize, tileSize)
+	self.Fire = display.newImageRect(tileGroup, "images/fire.png", tileSize, tileSize)
 	self.Fire.x = self.Object.x
 	self.Fire.y = self.Object.y
 	self.Fire.isVisible = false
@@ -82,20 +84,23 @@ function Tile.new(mt, x, y, altColor, delay)
 					roundDisplay.width = (Width - 100) / 15.0 * CurrentRound
 					roundDisplayFiretruck.x = roundDisplay.width + roundDisplay.x
 
-					-- Check if all furniture is burnt
-					local allOnFire = true
-					for i, furnIndex in ipairs(FurnitureTileIndexes) do
-						if Tiles[furnIndex].furniture ~= "" and not Tiles[furnIndex].onFire then
-							allOnFire = false
-						end
-					end
-					if allOnFire then
-						LoseGame = true
+					if CurrentRound >= MaxRounds and State ~= "Game Over" then
+						print("Game Over")
 						ChangeState("Game Over")
 					end
 
-					if CurrentRound >= MaxRounds and State ~= "Game Over" then
-						print("Game Over")
+					-- Check if all furniture is burnt
+					local allOnFire = true
+					for i, furnIndex in ipairs(FurnitureTileIndexes) do
+						local ran, err = pcall(function()
+							if Tiles[furnIndex].furniture ~= "" and not Tiles[furnIndex].onFire then
+								allOnFire = false
+							end
+						end)
+						if not ran then print(err) end
+					end
+					if allOnFire then
+						LoseGame = true
 						ChangeState("Game Over")
 					end
 				end
@@ -109,20 +114,21 @@ function Tile.new(mt, x, y, altColor, delay)
 						roundDisplay.width = (Width - 100) / 15.0 * CurrentRound
 						roundDisplayFiretruck.x = roundDisplay.width + roundDisplay.x
 
+						if CurrentRound >= MaxRounds and State ~= "Game Over" then
+							print("Game Over")
+							ChangeState("Game Over")
+						end
+
 						-- Check if all furniture is burnt
 						local allOnFire = true
 						for i, furnIndex in ipairs(FurnitureTileIndexes) do
+							if State == "Game Over" then break end
 							if Tiles[furnIndex].furniture ~= "" and not Tiles[furnIndex].onFire then
 								allOnFire = false
 							end
 						end
 						if allOnFire then
 							LoseGame = true
-							ChangeState("Game Over")
-						end
-
-						if CurrentRound >= MaxRounds and State ~= "Game Over" then
-							print("Game Over")
 							ChangeState("Game Over")
 						end
 					end
@@ -185,7 +191,7 @@ function PlaceFurniture(furniture, x, y, tile)
 		tile.furniture = "Side Table"
 		tile.furniturePlayer = CurrentPlayer
 
-		tile.Sprite = display.newImageRect("images/sidetable.png", tileSize, tileSize)
+		tile.Sprite = display.newImageRect(tileGroup, "images/sidetable.png", tileSize, tileSize)
 		tile.Sprite.x = tile.Object.x
 		tile.Sprite.y = tile.Object.y
 		tile.Sprite.alpha = 0
@@ -201,6 +207,7 @@ function PlaceFurniture(furniture, x, y, tile)
 
 		local c = PlayerColors[CurrentPlayer]
 		tile.Object:setFillColor(c.r, c.g, c.b, 0.3)
+		tile.Fire:toFront()
 
 	elseif furniture == "Coffee Table" then
 		--print("placing coffee table at tile (" .. tostring(x) .. ", " .. tostring(y) .. ")")

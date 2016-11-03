@@ -3,7 +3,6 @@ outOfTimeGroup = display.newGroup()
 outOfTimeGroup.x = Width / 2
 outOfTimeGroup.y = Height / 2
 outOfTimeGroup.isVisible = false
-GameplayGroup:insert(outOfTimeGroup)
 local outtaTimeBG = display.newRect(outOfTimeGroup, 0, 0, Width, Height)
 outtaTimeBG:setFillColor(0, 0, 0, 0.15)
 local outtaTimeText = display.newText({

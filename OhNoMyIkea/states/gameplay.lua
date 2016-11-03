@@ -2,6 +2,7 @@
 -- OBJECTS
 GameplayGroup = display.newGroup()
 GameplayGroup.isVisible = false
+GameplayGroup:toFront()
 
 placeWallInstructions = display.newText({
 	parent = GameplayGroup,

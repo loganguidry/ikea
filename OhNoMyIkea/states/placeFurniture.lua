@@ -116,6 +116,21 @@ tableButtonSelected = display.newRoundedRect(PlaceFurnitureGroup, tableButton.x,
 tableButtonSelected:setFillColor(0, 0.5, 0, 0.4)
 tableButtonSelected.isVisible = false]]
 
+doneButton = display.newRoundedRect(PlaceFurnitureGroup, Width - 25, Height - 25, 40, 30, 5)
+doneButton:setFillColor(0, 0.5, 0, 0.4)
+doneButtonText = display.newText({
+	parent = PlaceFurnitureGroup,
+	text = "Done",
+	x = doneButton.x,
+	y = doneButton.y + 2,
+	width = doneButton.width,
+	height = 18,
+	font = "Arial",
+	fontSize = 14,
+	align = "center"
+})
+doneButtonText:setFillColor(0)
+
 currentFurnitureHover = nil
 
 -- EVENT LISTENERS
@@ -131,3 +146,19 @@ end)
 	--if e.phase ~= "began" then return end
 	--SelectFurniture("Coffee Table")
 --end)
+doneButton:addEventListener("touch", function(e)
+	if e.phase ~= "began" then return end
+	if PlayerFurnitures[CurrentPlayer] == 0 then print ("Player has 0 furniture");return end
+
+	CurrentPlayer = CurrentPlayer + 1
+	currentPlayer.text = "Player " .. tostring(CurrentPlayer)
+	currentPlayerShadow.text = currentPlayer.text
+	if CurrentPlayer > Players then
+		CurrentPlayer = 1
+		currentPlayer.text = "Player " .. tostring(CurrentPlayer)
+		currentPlayerShadow.text = currentPlayer.text
+		ChangeState("Gameplay")
+	end
+	local c = PlayerColors[CurrentPlayer]
+	currentPlayer:setFillColor(c.r, c.g, c.b)
+end)

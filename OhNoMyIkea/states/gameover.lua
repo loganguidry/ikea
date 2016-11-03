@@ -1,5 +1,6 @@
 
 GameoverGroup = display.newGroup()
+showingGameOver = false
 
 local lineHeight = Height - 370
 
@@ -26,7 +27,8 @@ end]]
 
 function displayGameOverScreen()
 
-GameoverGroup = display.newGroup()
+if showingGameOver then return end
+showingGameOver = true
 
 local gameOverTxt = "The Firetruck is Here!"
 if LoseGame then
@@ -38,7 +40,7 @@ gameOverHeadline = display.newText({
 	text = gameOverTxt,
 	x = Width / 2,
 	y = Height - 570,
-	width = Width,
+	width = Width - 24,
 	height = 45,
 	font = "Arial",
 	fontSize = 45,
@@ -272,6 +274,30 @@ startOverTextShadow = display.newText({
 })
 startOverTextShadow:setFillColor(0)
 startOverText:toFront()
+
+local prompt = display.newGroup()
+GameoverGroup:insert(prompt)
+prompt.x = Width / 2
+prompt.y = startOverText.y - 35
+local promptRestart_CMD = display.newImageRect(prompt, "images/cmd_key.png", 40, 40)
+promptRestart_CMD.x = -40
+local promptRestart_R = display.newImageRect(prompt, "images/r_key.png", 40, 40)
+promptRestart_R.x = 33
+promptRestart_R:setFillColor(0)
+local promptRestart_Plus = display.newText({
+	parent = prompt,
+	text = "+",
+	x = 0,
+	y = 0,
+	width = Width,
+	height = 42,
+	font = "Arial",
+	fontSize = 40,
+	align = "center"
+})
+promptRestart_Plus:setFillColor(0)
+
+FallIn(prompt, startOverText.y - 35, 0)
 FallIn(startOverText, lineHeight + 200, 0)
 FallIn(startOverTextShadow, lineHeight + 201, 0)
 

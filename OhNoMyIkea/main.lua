@@ -5,6 +5,7 @@ display.setStatusBar(display.HiddenStatusBar)
 -- Create a new scene
 local composer = require("composer")
 local scene = composer.newScene()
+globalSceneGroup = nil
 
 -- Get window size:
 Width = display.contentWidth
@@ -48,6 +49,7 @@ require("playerColors")
 
 -- Objects
 currentPlayer = display.newText({
+	parent = globalSceneGroup,
 	text = "Player 1",
 	x = Width / 2,
 	y = Height - 162,
@@ -59,6 +61,7 @@ currentPlayer = display.newText({
 })
 currentPlayer.isVisible = false
 currentPlayerShadow = display.newText({
+	parent = globalSceneGroup,
 	text = "Player 1",
 	x = currentPlayer.x + 1,
 	y = currentPlayer.y + 1,
@@ -160,6 +163,11 @@ function ChangeState(newState)
 		currentPlayer.isVisible = false
 		currentPlayerShadow.isVisible = false
 		WallButtonGroup.isVisible = false
+		if currentFurnitureHover ~= nil then
+			currentFurnitureHover:removeSelf()
+			currentFurnitureHover = nil
+		end
+		HoverTooltip.Group.isVisible = false
 		displayGameOverScreen()
 	end
 end
@@ -185,6 +193,14 @@ end
 
 -- Scene functions
 function scene:create(event)
+	globalSceneGroup = self.view
+	globalSceneGroup:insert(GameplayGroup)
+	globalSceneGroup:insert(GameoverGroup)
+	globalSceneGroup:insert(PlaceFurnitureGroup)
+	globalSceneGroup:insert(HoverWallDisplay)
+	globalSceneGroup:insert(HoverTooltip)
+	globalSceneGroup:insert(outOfTimeGroup)
+	globalSceneGroup:insert(placingWallGroup)
 end
 function scene:show(event)
 end
@@ -401,7 +417,7 @@ local function KeyPress(event)
 	if event.phase == "down" then
 		if event.keyName == "space" then
 			-- Spread the fire
-			--SpreadFire()
+			SpreadFire()
 		elseif event.keyName == "r" then
 			-- Rotate wall
 			CurrentWallDirection = CurrentWallDirection + 90
